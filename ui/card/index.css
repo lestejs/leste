@@ -1,0 +1,24 @@
+.l-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--xxs);
+  width: fit-content;
+}
+.l-cards .l-card {
+  flex: 1 0 50%;
+}
+.l-card {
+  overflow: hidden;
+  width: max-content;
+  .image {
+    background-color: var(--black);
+    max-width: 320px;
+    display: block;
+  }
+  .label {
+    margin-top: 5px;
+    font-size: var(--fs-xs);
+    background-color: var(--gray);
+    padding: var(--xxs);
+  }
+}

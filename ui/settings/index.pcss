@@ -1,0 +1,30 @@
+.settings {
+  .navigation {
+    box-shadow: -1px 0 0 0 var(--thin) inset;
+    padding-right: 0;
+
+    .l-button {
+    }
+
+    .l-button.active {
+      width: 100%;
+      border: 1px solid var(--thin);
+      background-color: white;
+      border-right: 0;
+      .label {
+        font-weight: 600;
+      }
+      svg {
+        opacity: 1;
+      }
+    }
+  }
+
+  .content {
+    flex: 1;
+    padding: 0 var(--s);
+  }
+  svg {
+    opacity: .6;
+  }
+}

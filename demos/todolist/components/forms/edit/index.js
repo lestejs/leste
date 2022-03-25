@@ -23,24 +23,22 @@ export default {
     upload: import('~/ui/upload'),
     input: import('~/ui/input')
   },
-  mediator: {
-    store: cards,
+  stores: {
+    cards
+  },
+  props: {
     proxies: {
       cards: {},
     },
-    methods: {
-      setCards: {},
-      saveCards: {},
-      remove: {}
-    }
-  },
-  props: {
     params: {
-      type: {}
+      type: {},
     },
     methods: {
       ready: {},
-      change: {}
+      change: {},
+      setCards: {},
+      saveCards: {},
+      remove: {}
     }
   },
   proxies: {
@@ -124,7 +122,7 @@ export default {
     element(name) {
       this.proxy.index = name
       this.node.element.power('hide', false, this.proxy.index)
-      this.method.change(true)
+      this.method.change(false)
     },
     save() {
       // this.$node.element.$init(1).$demount()
@@ -132,7 +130,7 @@ export default {
     },
     list() {
       this.proxy.index !== null && this.node.element.power('hide', true, this.proxy.index)
-      this.method.change(false)
+      this.method.change(true)
     }
   },
   async mounted() {

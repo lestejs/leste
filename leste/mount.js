@@ -23,7 +23,7 @@ async function mount(nodeElement, entry, props = {}) {
     }
     const component = new Init(entry)
     await component.created()
-    component.mediator()
+    component.stores()
     component.setters()
     component.handlers()
     component.params()

@@ -29,8 +29,10 @@ export default {
   proxies: {
     open: false
   },
-  mediator: {
-    store: cards,
+  stores: {
+    cards
+  },
+  props: {
     proxies: {
       cards: {},
     },
@@ -88,7 +90,7 @@ export default {
       this.node.sidebar.power('start', v)
     },
     add() {
-      this.node.sidebar.integrateComponent({
+      this.node.sidebar.integrate({
         src: this.source.edit,
         params: {
           type: 'add'
@@ -101,6 +103,7 @@ export default {
     },
     close() {
       this.node.sidebar.power('open', false)
+      this.method.change(true)
     },
   },
   mounted() {

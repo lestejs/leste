@@ -21,7 +21,8 @@ export default {
   props: {
     proxies: {
       open: {},
-      start: {},
+      start: {
+      },
       mini: {}
     },
     methods: {
@@ -50,14 +51,14 @@ export default {
       },
       'group-first': {
         classes: {
-          hide: () => this.proxy.start,
-          'shift-next': () => !this.proxy.start
+          hide: () => !this.proxy.start,
+          'shift-next': () => this.proxy.start
         },
       },
       'group-second': {
         classes: {
-          hide: () => !this.proxy.start,
-          'shift-back': () => this.proxy.start
+          hide: () => this.proxy.start,
+          'shift-back': () => !this.proxy.start
         }
       }
     }

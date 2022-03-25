@@ -1,6 +1,6 @@
-import Mediator from '~/leste/mediator'
+import Store from '~/leste/store'
 
-export default new Mediator({
+export default new Store({
   name: 'cards',
   proxies: {
     cards: [

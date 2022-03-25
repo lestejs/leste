@@ -10,7 +10,7 @@ export default function simple() {
           const value = v()
           this.nodeElement.power(pr, value)
         })
-      }
+      } else Object.assign(proxies, { [pr]: v })
     }
   }
   return { component, proxies }

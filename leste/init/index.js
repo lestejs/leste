@@ -18,31 +18,44 @@ class Init {
       source: component.sources
     }
   }
-  mediator() {
-    if (this.component.mediator) {
-      if (this.component.mediator.proxies) {
-        for (const [key, pr] of Object.entries(this.component.mediator.proxies)) {
-          this.component.proxies[key] = this.component.mediator.store.proxies[key] || pr.default
-        }
-      }
-      if (this.component.mediator.methods) {
-        for (const [key] of Object.entries(this.component.mediator.methods)) {
-          this.context.method[key] = this.component.mediator.store.methods[key].bind(this.component.mediator.store)
-        }
-      }
-      const name = this.component.mediator.store.name
-      document.addEventListener(name, (e) => {
-        const { path, value } = e.detail
-        if (this.component.mediator.proxies && (path[0] in this.component.mediator.proxies)) {
-          let target = this.context.proxy
-          if (path.length > 0) {
-            for (let i = 0;i < path.length - 1;i++) {
-              target = target[path[i]]
+  stores() {
+    if (this.component.stores) {
+      for (let store of Object.values(this.component.stores)) {
+        if (store.params) {
+          for (const [key, pr] of Object.entries(store.params)) {
+            if (key in this.component.props.params) {
+              this.component.params[key] = store.params[key] || pr.default
             }
-            target[path[path.length - 1]] = value
-          } else target[path[0]] = value
+          }
         }
-      }, false)
+        if (store.proxies) {
+          for (const [key, pr] of Object.entries(store.proxies)) {
+            if (key in this.component.props.proxies) {
+              this.component.proxies[key] = store.proxies[key] || pr.default
+            }
+          }
+        }
+        if (store.methods) {
+          for (const [key] of Object.entries(store.methods)) {
+            if (key in this.component.props.methods) {
+              this.context.method[key] = store.methods[key].bind(store)
+            }
+          }
+        }
+        const name = store.name
+        document.addEventListener(name, (e) => {
+          const {path, value} = e.detail
+          if (store.proxies && (path[0] in this.component.props.proxies)) {
+            let target = this.context.proxy
+            if (path.length > 0) {
+              for (let i = 0; i < path.length - 1; i++) {
+                target = target[path[i]]
+              }
+              target[path[path.length - 1]] = value
+            } else target[path[0]] = value
+          }
+        }, false)
+      }
     }
   }
   methods() {
@@ -76,24 +89,28 @@ class Init {
   props(props) {
     const power = {}
     if (this.component.props) {
-      if (this.component.props.proxies) {
+      if (props.proxies && this.component.props.proxies) {
         for (const [key, pr] of Object.entries(this.component.props.proxies)) {
-          const v = props.proxies[key]
-          this.component.proxies[key] = (typeof v === 'undefined' || v === null || v === '') ? pr.default : v
-          power[key] = (v) => {
-            this.context.proxy[key] = JSON.parse(JSON.stringify(v))
+          if (key in props.proxies) {
+            this.component.proxies[key] = props.proxies[key]
+            power[key] = (v) => {
+              this.context.proxy[key] = JSON.parse(JSON.stringify(v))
+            }
+          } else this.component.proxies[key] = pr.default
+        }
+      }
+      if (props.methods && this.component.props.methods) {
+        for (const [key] of Object.entries(props.methods)) {
+          if (key in this.component.props.methods) {
+            this.context.method[key] = props.methods[key]
           }
         }
       }
-      if (this.component.props.methods) {
-        for (const [key] of Object.entries(this.component.props.methods)) {
-          this.context.method[key] = props.methods[key]
-        }
-      }
-      if (this.component.props.params) {
+      if (props.params && this.component.props.params) {
         for (const [key, pr] of Object.entries(this.component.props.params)) {
-          const v = props.params[key]
-          this.context.param[key] = (typeof v === 'undefined' || v === null || v === '') ? pr.default : v
+          if (key in props.params) {
+            this.context.param[key] = props.params[key]
+          } else this.context.param[key] = pr.default
         }
       }
     }

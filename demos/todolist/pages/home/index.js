@@ -82,10 +82,10 @@ export default {
   },
   methods: {
     ready() {
-      this.node.sidebar.powerComponent('open', true)
+      this.node.sidebar.power('open', true)
     },
     change(v) {
-      this.node.sidebar.powerComponent('start', v)
+      this.node.sidebar.power('start', v)
     },
     add() {
       this.node.sidebar.integrateComponent({
@@ -100,7 +100,7 @@ export default {
       })
     },
     close() {
-      this.node.sidebar.powerComponent('open', false)
+      this.node.sidebar.power('open', false)
     },
   },
   mounted() {

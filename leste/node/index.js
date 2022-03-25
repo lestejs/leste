@@ -1,3 +1,7 @@
+import { classes } from './classes'
+import native from './nativeProperty'
+import component from './component'
+
 class Node {
   constructor(node, keyNode, context, nodeElement, refs) {
     this.node = node
@@ -5,7 +9,7 @@ class Node {
     this.context = context
     this.refs = refs
     this.nodeElement = nodeElement
-    this.nodeElement.reactiveInNode = (refs, name, active) => {
+    this.nodeElement.reactive = (refs, name, active) => {
       if (refs.length) {
         if (!(this.keyNode in this.context.reactiveMap)) this.context.reactiveMap[this.keyNode] = {}
         refs.forEach(ref => {
@@ -17,4 +21,7 @@ class Node {
     }
   }
 }
-export { Node }
+Object.assign(Node.prototype, { classes })
+Object.assign(Node.prototype, native)
+Object.assign(Node.prototype, component)
+export default Node

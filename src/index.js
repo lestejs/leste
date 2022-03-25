@@ -8,4 +8,4 @@ mount(root, component)
 // import routes from '~/demos/renaissance/routes'
 // import routes from  '~/demos/renaissance/routes'
 // import router from '~/leste/router'
-// router(routes, (component) => mount(root, component))
+// router(routes, (init) => mount(root, init))

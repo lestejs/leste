@@ -21,7 +21,7 @@ class Iterator {
     for (const [pr, v] of Object.entries(this.props)) {
       if (typeof v === 'function') {
         for (let index = 0;index < arr.length;index++) {
-          this.nodeElement.powerComponent(index, pr, v(arr[index], index))
+          this.nodeElement.power(index, pr, v(arr[index], index))
         }
       }
     }
@@ -29,10 +29,10 @@ class Iterator {
   edit(value, index, pr) {
     const v = this.props[pr]
     if (index) {
-      this.nodeElement.powerComponent(index, pr, v(this.data[index], index))
+      this.nodeElement.power(index, pr, v(this.data[index], index))
     } else {
       for (let index = 0;index < this.nodeElement.children.length;index++) {
-        this.nodeElement.powerComponent(index, pr, v(this.data[index], index))
+        this.nodeElement.power(index, pr, v(this.data[index], index))
       }
     }
   }
@@ -42,4 +42,5 @@ class Iterator {
     }
   }
 }
+
 export { Iterator }

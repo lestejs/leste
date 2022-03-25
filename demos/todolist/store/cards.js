@@ -20,7 +20,7 @@ export default new Mediator({
     },
     saveCards(card) {
       this.proxy.cards.push(card)
-      localStorage.setItem('cards', this.proxy.cards)
+      // localStorage.setItem('cards', this.proxy.cards)
     },
     remove(index) {
       this.proxy.cards.splice(index, 1)

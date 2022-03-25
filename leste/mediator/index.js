@@ -1,4 +1,4 @@
-import { createDeepProxy } from '../component/proxied'
+import { dipprox } from '../init/dipprox'
 
 export default class Mediator {
   constructor(options) {
@@ -6,16 +6,12 @@ export default class Mediator {
     this.methods = options.methods
     this.props = {}
     this.name = options.name
-    this.evt = document.createEvent('Event')
-    this.evt.initEvent(options.name, true, true)
-    const self = this
-    this.proxy = createDeepProxy({ ...options.proxies }, {
+    const evt = document.createEvent('Event')
+    evt.initEvent(options.name, true, true)
+    this.proxy = dipprox({ ...options.proxies }, {
       set(target, path, value) {
-        self.evt.detail = { path, value }
-        document.dispatchEvent(self.evt)
-      },
-      get(target, path) {
-        console.log('get', path.join('_'))
+        evt.detail = { path, value }
+        document.dispatchEvent(evt)
       },
       deleteProperty(target, path) {
         console.log('delete', path.join('_'))

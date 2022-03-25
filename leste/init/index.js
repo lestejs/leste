@@ -1,8 +1,8 @@
-import { Node } from '../node/Node'
-import { property } from '../node/property'
-import { createDeepProxy } from './proxied'
+import { dipprox } from './dipprox'
+import Node from '../node'
+import hooks from './hooks'
 
-class Component {
+class Init {
   constructor(component) {
     this.component = component
     if (!this.component.proxies) this.component.proxies = {}
@@ -14,6 +14,7 @@ class Component {
       method: {},
       proxy: {},
       setter: {},
+      handler: {},
       source: component.sources
     }
   }
@@ -58,6 +59,13 @@ class Component {
       }
     }
   }
+  handlers() {
+    if (this.component.handlers) {
+      for (const key in this.component.handlers) {
+        this.context.handler[key] = (v) => this.component.handlers[key].bind(this.context)(v)
+      }
+    }
+  }
   params() {
     if (this.component.params) {
       for (const [key, param] of Object.entries(this.component.params)) {
@@ -93,7 +101,7 @@ class Component {
   }
   proxies() {
     const self = this
-    this.context.proxy = createDeepProxy({ ...this.component.proxies }, {
+    this.context.proxy = dipprox({ ...this.component.proxies }, {
       beforeSet(target, path, value, ref) {
         return self.context.setter[ref]?.bind(self.context)(value)
       },
@@ -111,9 +119,9 @@ class Component {
             }
           }
         }
+        return self.context.handler[ref]?.bind(self.context)(value)
       },
       get(target, path) {
-        console.log('get', path.join('_'))
         self.refs.push(path.join('_'))
       },
       deleteProperty(target, path) {
@@ -121,43 +129,30 @@ class Component {
       }
     })
   }
-  async created() {
-    this.component.created && await this.component.created.bind(this.context)()
-  }
-  async loaded() {
-    this.component.loaded && await this.component.loaded.bind(this.context)()
-  }
-  async mounted() {
-    this.component.mounted && await this.component.mounted.bind(this.context)()
-  }
-  async unmounted() {
-    // document.removeEventListenerr
-    this.component.unmounted && await this.component.unmounted.bind(this.context)()
-  }
   async nodes(container) {
     if (this.component.nodes) {
       const nodes = this.component.nodes.bind(this.context)()
-      for await (const [keyNode, node] of Object.entries(nodes)) {
+      for await (const [keyNode, options] of Object.entries(nodes)) {
         const nodeElement = container.querySelector(`.${keyNode}`)
         Object.assign(this.context.node, { [keyNode]: nodeElement })
         nodeElement.getContainer = (index) => nodeElement.children[index || 0]
-        nodeElement.unmountComponent = async (index) => {
+        nodeElement.unmount = async (index) => {
           nodeElement.getContainer(index || 0).remove()
           await this.unmounted()
         }
-        nodeElement.powerComponent = (proxy, value, index) => {
+        nodeElement.power = (proxy, value, index) => {
           nodeElement.getContainer(index).power[proxy](value)
         }
-        Object.assign(Node.prototype, property)
-        const controller = new Node(node, keyNode, this.context, nodeElement, this.refs)
-        for await (const [key, callback] of Object.entries(node)) {
-          controller.native(key, callback)
-          if (key in controller) {
-            await controller[key](keyNode, callback)
+        const node = new Node(options, keyNode, this.context, nodeElement, this.refs)
+        for await (const [key, callback] of Object.entries(options)) {
+          node.native(key, callback)
+          if (key in node) {
+            await node[key](keyNode, callback)
           }
         }
       }
     }
   }
 }
-export { Component }
+Object.assign(Init.prototype, hooks)
+export { Init }

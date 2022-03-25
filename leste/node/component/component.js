@@ -1,6 +1,6 @@
-import { mount } from '../../../mount'
+import { mount } from '../../mount'
 
-class Creator { // maker
+class Component {
   constructor(component, context, keyNode, nodeElement, refs) {
     this.refs = refs
     this.component = component
@@ -33,7 +33,7 @@ class Creator { // maker
     }
   }
   // propsProxy(val, index) {
-  //   const proxy = this.component.proxy
+  //   const proxy = this.init.proxy
   //   if (proxy) {
   //     for (const [pr, v] of Object.entries(proxy)) {
   //       if (typeof v === 'function' && v.name) {
@@ -65,4 +65,4 @@ class Creator { // maker
     }
   }
 }
-export { Creator }
+export { Component }

@@ -1,7 +1,7 @@
-import { Component } from './component/Component'
+import { Init } from './init'
 function contain(entry, nodeElement, getElement) {
   if (entry.template) {
-    const container = document.createElement('component') // this.component.tag ||
+    const container = document.createElement('component') // this.init.tag ||
     nodeElement.appendChild(container)
     container.innerHTML = entry.template
     return container
@@ -21,10 +21,11 @@ async function mount(nodeElement, entry, props = {}) {
       getElement = () => nodeElement
       await mount(nodeElement, entry.layout)
     }
-    const component = new Component(entry)
+    const component = new Init(entry)
     await component.created()
     component.mediator()
     component.setters()
+    component.handlers()
     component.params()
     component.methods()
     const container = contain(entry, nodeElement, getElement)

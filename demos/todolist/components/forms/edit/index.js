@@ -123,15 +123,15 @@ export default {
     },
     element(name) {
       this.proxy.index = name
-      this.node.element.powerComponent('hide', false, this.proxy.index)
+      this.node.element.power('hide', false, this.proxy.index)
       this.method.change(true)
     },
     save() {
-      // this.$node.element.$component(1).$demount()
+      // this.$node.element.$init(1).$demount()
       this.method.saveCards(this.param.data)
     },
     list() {
-      this.proxy.index !== null && this.node.element.powerComponent('hide', true, this.proxy.index)
+      this.proxy.index !== null && this.node.element.power('hide', true, this.proxy.index)
       this.method.change(false)
     }
   },

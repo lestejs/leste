@@ -5,11 +5,11 @@ export default {
       name: 'label',
       label: 'Название продукта'
     },
-    {
-      type: 'input',
-      name: 'price',
-      label: 'Цена'
-    },
+    // {
+    //   type: 'input',
+    //   name: 'price',
+    //   label: 'Цена'
+    // },
     {
       type: 'input',
       name: 'url',

@@ -121,18 +121,31 @@ class Init {
     if (this.component.props.proxies) {
       for (const [key, pr] of Object.entries(this.component.props.proxies)) {
         if (!this.component.proxies) this.component.proxies[key] = pr.default
+        if (this.component.props.proxies[key].type) {
+          if (!typeof this.component.proxies[key] === this.component.props.proxies[key].type) {
+            console.error('Error props type')
+          }
+        }
       }
     }
     if (this.component.props.methods) {
       for (const key in this.component.props.methods) {
-        // if (key in this.component.props.methods) {
-        //   this.context.method[key] = props.methods[key]
-        // }
+        if (typeof this.component.props.methods !== 'object') {
+          console.error('Error props type')
+        } else if (this.component.props.methods[key].instance
+          && this.context.method[key] instanceof this.component.props.methods[key].instance) {
+          console.error('Error props instance')
+        }
       }
     }
     if (this.component.props.params) {
       for (const [key, pr] of Object.entries(this.component.props.params)) {
         if (!this.context.param[key]) this.context.param[key] = pr.default
+        if (this.component.props.params[key].type) {
+          if (!typeof this.context.param[key] === this.component.props.params[key].type) {
+            console.error('Error props type')
+          }
+        }
       }
     }
   }

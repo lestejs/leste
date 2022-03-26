@@ -38,7 +38,8 @@ export default {
       change: {},
       setCards: {},
       saveCards: {},
-      remove: {}
+      remove: {},
+      close: {}
     }
   },
   proxies: {
@@ -125,8 +126,8 @@ export default {
       this.method.change(false)
     },
     save() {
-      // this.$node.element.$init(1).$demount()
       this.method.saveCards(this.param.data)
+      this.method.close()
     },
     list() {
       this.proxy.index !== null && this.node.element.power('hide', true, this.proxy.index)

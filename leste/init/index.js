@@ -22,21 +22,21 @@ class Init {
     if (this.component.stores) {
       for (let store of Object.values(this.component.stores)) {
         if (store.params) {
-          for (const [key, pr] of Object.entries(store.params)) {
+          for (const key in store.params) {
             if (key in this.component.props.params) {
-              this.component.params[key] = store.params[key] || pr.default
+              this.context.param[key] = store.params[key]
             }
           }
         }
         if (store.proxies) {
-          for (const [key, pr] of Object.entries(store.proxies)) {
+          for (const key in store.proxies) {
             if (key in this.component.props.proxies) {
-              this.component.proxies[key] = store.proxies[key] || pr.default
+              this.component.proxies[key] = JSON.parse(JSON.stringify(store.proxies[key]))
             }
           }
         }
         if (store.methods) {
-          for (const [key] of Object.entries(store.methods)) {
+          for (const key in store.methods) {
             if (key in this.component.props.methods) {
               this.context.method[key] = store.methods[key].bind(store)
             }
@@ -90,35 +90,55 @@ class Init {
     const power = {}
     if (this.component.props) {
       if (props.proxies && this.component.props.proxies) {
-        for (const [key, pr] of Object.entries(this.component.props.proxies)) {
+        for (const key in this.component.props.proxies) {
           if (key in props.proxies) {
             this.component.proxies[key] = props.proxies[key]
             power[key] = (v) => {
               this.context.proxy[key] = JSON.parse(JSON.stringify(v))
             }
-          } else this.component.proxies[key] = pr.default
+          }
         }
       }
       if (props.methods && this.component.props.methods) {
-        for (const [key] of Object.entries(props.methods)) {
+        for (const key in props.methods) {
           if (key in this.component.props.methods) {
             this.context.method[key] = props.methods[key]
           }
         }
       }
       if (props.params && this.component.props.params) {
-        for (const [key, pr] of Object.entries(this.component.props.params)) {
+        for (const key in this.component.props.params) {
           if (key in props.params) {
             this.context.param[key] = props.params[key]
-          } else this.context.param[key] = pr.default
+          }
         }
       }
+      this.validation()
     }
     return power
   }
+  validation() {
+    if (this.component.props.proxies) {
+      for (const [key, pr] of Object.entries(this.component.props.proxies)) {
+        if (!this.component.proxies) this.component.proxies[key] = pr.default
+      }
+    }
+    if (this.component.props.methods) {
+      for (const key in this.component.props.methods) {
+        // if (key in this.component.props.methods) {
+        //   this.context.method[key] = props.methods[key]
+        // }
+      }
+    }
+    if (this.component.props.params) {
+      for (const [key, pr] of Object.entries(this.component.props.params)) {
+        if (!this.context.param[key]) this.context.param[key] = pr.default
+      }
+    }
+  }
   proxies() {
     const self = this
-    this.context.proxy = dipprox({ ...this.component.proxies }, {
+    this.context.proxy = dipprox(JSON.parse(JSON.stringify(this.component.proxies)), {
       beforeSet(target, path, value, ref) {
         return self.context.setter[ref]?.bind(self.context)(value)
       },

@@ -97,7 +97,8 @@ export default {
         },
         methods: {
           ready: this.method.ready,
-          change: this.method.change
+          change: this.method.change,
+          close: this.method.close
         }
       })
     },

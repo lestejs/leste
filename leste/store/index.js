@@ -1,4 +1,4 @@
-import { dipprox } from '../init/dipprox'
+import { dipprox } from '../utils/dipprox'
 
 export default class Store {
   constructor(options) {

@@ -1,4 +1,4 @@
-import { dipprox } from './dipprox'
+import { dipprox } from '../utils/dipprox'
 import Node from '../node'
 import hooks from './hooks'
 
@@ -15,7 +15,16 @@ class Init {
       proxy: {},
       setter: {},
       handler: {},
-      source: component.sources
+      source: component.sources,
+      nextTick: (callback) => {
+         return new Promise(resolve => {
+          const timer = setTimeout(() => {
+            callback && callback()
+            clearTimeout(timer)
+            resolve()
+          })
+        })
+      }
     }
   }
   stores() {

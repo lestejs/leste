@@ -6,7 +6,7 @@ class Iterator {
     this.data = data
   }
   async length(length) {
-    length > this.nodeElement.children.length && await this.append()
+    length > this.nodeElement.children.length && await this.add(length)
     length < this.nodeElement.children.length && this.remove(length)
   }
   async change(t, key, pr) {
@@ -34,6 +34,11 @@ class Iterator {
       for (let index = 0;index < this.nodeElement.children.length;index++) {
         this.nodeElement.power(index, pr, v(this.data[index], index))
       }
+    }
+  }
+  async add(length) {
+    while (length > this.nodeElement.children.length) {
+      await this.append()
     }
   }
   remove(length) {

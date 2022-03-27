@@ -2,10 +2,7 @@ function classes() {
   for (const [cl, v] of Object.entries(this.node.classes)) {
     const active = () => {
       if (v()) {
-        const timer = setTimeout(() => {
-          this.nodeElement.classList.add(cl)
-          clearTimeout(timer)
-        }, 0)
+        this.nodeElement.classList.add(cl)
       } else this.nodeElement.classList.remove(cl)
     }
     this.refs.length = 0

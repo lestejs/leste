@@ -29,11 +29,11 @@ export default async function iterate() {
   const component = new this.Component(this.node.component, this.context, this.keyNode, this.nodeElement, this.refs)
   this.refs.length = 0
   const length = typeof data === 'number' ? data : data.length
-  if (length && this.refs.length) {
+  if (this.refs.length) {
     const iterator = new Iterator(this.nodeElement, this.node.component.proxies, data, async() => {
       await component.create(this.node.component.src, propProxies(data, data.length - 1, iterator), data[data.length - 1], data.length - 1)
     })
-    length && this.nodeElement.reactive([this.refs[0]], 'component', (t, p, v) => iterator.length.bind(iterator)(v))
+    this.nodeElement.reactive([this.refs[0]], 'component', (t, p, v) => iterator.length.bind(iterator)(v))
   }
   for await (const [index, val] of data.entries()) {
     const proxies = propProxies(data, index)

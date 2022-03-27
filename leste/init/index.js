@@ -8,6 +8,7 @@ class Init {
     if (!this.component.proxies) this.component.proxies = {}
     this.refs = []
     this.context = {
+      options: component,
       node: {},
       param: {},
       reactiveMap: {},

@@ -1,6 +1,6 @@
 export default {
   async created() {
-    this.component.created && await this.component.created.bind(this)()
+    this.component.created && await this.component.created.bind(this.context)()
   },
   async loaded() {
     this.component.loaded && await this.component.loaded.bind(this.context)()

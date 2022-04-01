@@ -8,7 +8,7 @@ export default {
     preload: true
   },
   props: {
-    params: {
+    proxies: {
       url: {},
       alt: {}
     },
@@ -21,8 +21,8 @@ export default {
       'l-preload': {
       },
       image: {
-        src: () => this.param.url,
-        alt: () => this.param.alt || '',
+        src: () => this.proxy.url,
+        alt: () => this.proxy.alt || '',
         onload: () => {
           this.node['l-preload'].classList.add('hide')
         },

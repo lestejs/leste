@@ -63,7 +63,6 @@ export default {
           data: this.proxy.cards,
           src: card,
           params: {
-            card: (element) => element,
             button: 'edit',
             icon: () => iconGenerate('1100110010101001000111111')
           },

@@ -19,7 +19,6 @@ export default {
     </div>`,
   props: {
     params: {
-      card: {},
       button: {},
       icon: {}
     },
@@ -47,22 +46,22 @@ export default {
       background: {
         style: () => {
           return {
-            'background-image': `url(${this.param.card.url})`
+            'background-image': `url(${this.proxy.card.url})`
           }
         }
       },
       title: {
-        textContent: () => this.proxy.card.title || this.param.card.title,
+        textContent: () => this.proxy.card.title,
       },
       desc: {
-        textContent: () => this.param.card.desc,
+        textContent: () => this.proxy.card.desc,
       },
       'l-card-image': {
         component: {
           src: image,
-          params: {
-            url: this.param.card.url,
-            alt: this.param.card.title,
+          proxies: {
+            url: () => this.proxy.card.url,
+            alt: () => this.proxy.card.title
           }
         }
       }
@@ -70,7 +69,7 @@ export default {
   },
   methods: {
     action(name) {
-      this.method.actionCard(name, this.param.card)
+      this.method.actionCard(name, this.proxy.card)
     }
   }
 }

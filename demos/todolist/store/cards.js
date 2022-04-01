@@ -13,21 +13,26 @@ const store = localforage.createInstance({
 export default new Store({
   name: 'cards',
   proxies: {
-    cards: [
+    cards: [{
+                id: 'fgr64t43',
+                url: 'https://worldclassmag.com/files/nodus_items/0004/2216/attaches/fuji.jpg',
+                title: 'links1',
+                desc: 'Big Shoes',
+                price: '$100'
+              },
       {
-        id: 'fgr64t43',
+        id: 'fgr64t45',
         url: 'https://worldclassmag.com/files/nodus_items/0004/2216/attaches/fuji.jpg',
-        title: 'links',
+        title: 'links2',
         desc: 'Big Shoes',
         price: '$100'
-      }
-    ],
+      }]
   },
   methods: {
     set() {
       store.getItem('cards').then((data)=> {
         if (data) {
-          this.proxy.cards = data
+          this.proxy.cards.unshift(...data)
         }
       })
     },

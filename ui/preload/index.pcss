@@ -1,0 +1,28 @@
+.l-preload {
+  position: relative;
+}
+
+.l-preload:before {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  content: '';
+  display: block;
+  height: calc(100% + 6px);
+  width: calc(100% + 6px);
+  background-image: url(./preload.svg);
+  background-size: cover;
+  animation-name: spin;
+  animation-duration: 800ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes spin {
+  from {
+    transform:rotate(0deg);
+  }
+  to {
+    transform:rotate(360deg);
+  }
+}

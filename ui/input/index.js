@@ -44,13 +44,15 @@ export default {
         classes: {
           hide: () => this.proxy.hide,
           error: () => this.proxy.value === ''
+        },
+        onclick: () => {
+          this.node.field.focus()
         }
       },
       label: {
         textContent: () => this.param.label
       },
       field: {
-        // innerText: this.$param.element.options.value,
         textContent: () => this.proxy.value,
         oninput: (event) => {
           // const keycode = event.charCode || event.keyCode

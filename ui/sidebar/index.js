@@ -1,4 +1,4 @@
-import './index.css'
+import './index.pcss'
 import btn from '~/ui/button'
 import { iconGenerate } from '~/ui/icon'
 

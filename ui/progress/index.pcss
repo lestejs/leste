@@ -1,0 +1,22 @@
+.l-progress {
+  .track {
+    height: 4px;
+    width: 100%;
+    background-color: var(--light-gray);
+    position: relative;
+  }
+  .line {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: var(--black);
+    transition: width var(--transition);
+  }
+  .label {
+    margin-top: var(--xxs);
+    font-size: var(--fs-xs);
+  }
+}

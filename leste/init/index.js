@@ -17,13 +17,13 @@ class Init {
       setter: {},
       handler: {},
       source: component.sources,
-      nextTick: (callback) => {
+      delay: (callback, delay) => {
          return new Promise(resolve => {
           const timer = setTimeout(() => {
             callback && callback()
             clearTimeout(timer)
             resolve()
-          })
+          }, delay || 0)
         })
       }
     }
@@ -34,7 +34,7 @@ class Init {
         if (store.params) {
           for (const key in store.params) {
             if (key in this.component.props.params) {
-              this.context.param[key] = store.params[key]
+              this.context.param[key] = {...store.params[key]}
             }
           }
         }
@@ -62,7 +62,9 @@ class Init {
                 target = target[path[i]]
               }
               target[path[path.length - 1]] = value
-            } else target[path[0]] = value
+            } else {
+              target[path[0]] = value
+            }
           }
         }, false)
       }
@@ -91,8 +93,8 @@ class Init {
   }
   params() {
     if (this.component.params) {
-      for (const [key, param] of Object.entries(this.component.params)) {
-        this.context.param[key] = param
+      for (const key in this.component.params) {
+        this.context.param[key] = {...this.component.params[key]}
       }
     }
   }
@@ -106,7 +108,7 @@ class Init {
             power[key] = (v) => {
               this.context.proxy[key] = JSON.parse(JSON.stringify(v))
             }
-          }
+          } else this.component.proxies[key] = false
         }
       }
       if (props.methods && this.component.props.methods) {
@@ -120,7 +122,7 @@ class Init {
         for (const key in this.component.props.params) {
           if (key in props.params) {
             this.context.param[key] = props.params[key]
-          }
+          } else this.context.param[key] = false
         }
       }
       this.validation()
@@ -130,7 +132,7 @@ class Init {
   validation() {
     if (this.component.props.proxies) {
       for (const [key, pr] of Object.entries(this.component.props.proxies)) {
-        if (!this.component.proxies) this.component.proxies[key] = pr.default
+        if (!this.component.proxies[key]) this.component.proxies[key] = pr.default
         if (this.component.props.proxies[key].type) {
           if (!typeof this.component.proxies[key] === this.component.props.proxies[key].type) {
             console.error('Error props type')
@@ -172,7 +174,6 @@ class Init {
               const actives = self.context.reactiveMap[keyNode][name][ref]
               if (actives?.length) {
                 for (const active of actives) {
-                  console.log('set', ref, '=', JSON.stringify(value))
                   await active(target, path, value)
                 }
               }

@@ -1,10 +1,10 @@
 import '~/ui/ui.css'
-import '~/ui/card/index.css'
-import '~/ui/input/index.css'
-import '~/ui/button/index.css'
-import '~/ui/progress/index.css'
-import '~/ui/upload/index.css'
-import '~/ui/settings/index.pcss'
+import '~/ui/card/index.pcss'
+import '~/ui/image/index.pcss'
+import '~/ui/input/index.pcss'
+import '~/ui/button/index.pcss'
+import '~/ui/preload/index.pcss'
+import '~/ui/progress/index.pcss'
 import '../components/forms/index.css'
 
 

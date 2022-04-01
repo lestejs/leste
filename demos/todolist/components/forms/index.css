@@ -7,25 +7,3 @@
   width: 100%;
 }
 
-.light-btn button.l-button {
-  color: var(--black);
-}
-.light-btn button.l-button svg {
-  fill: var(--black);
-}
-.light-btn button.l-button:active {
-  background-color: var(--light-gray);
-}
-.light-btn button.active {
-  background-color: var(--light-gray);
-}
-
-.fill-btn button.l-button {
-  color: white;
-  background-color: #111;
-  margin-top: var(--s);
-}
-
-.fill-btn button.l-button svg {
-  fill: white;
-}

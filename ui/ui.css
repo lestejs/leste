@@ -27,13 +27,14 @@
     --gray500: #222;
     --gray900: #151515;
     --black: #111;
+    --dark: #10080a
 }
 
-body, h1, h2, h3, p, ul, li {
+body, h1, h2, h3, h4, h5, h6, p, ul, li {
     margin: 0;
     padding: 0;
 }
-* {
+*, :before, :after {
     box-sizing: border-box;
 }
 

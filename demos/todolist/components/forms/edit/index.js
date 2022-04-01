@@ -10,14 +10,13 @@ export default {
       <div class="desc">Список полей для заполнения</div>
       <div class="content"></div>
       <div class="progress"></div>
-      <div class="save fill-btn late"></div>`,
+      <div class="save dark-btn late"></div>`,
     'group-second': `
-      <div class="bar-list"></div>
-      <div class="element"></div>`
+      <div class="element"></div>
+      <div class="bar-list"></div>`
   },
   params: {
     elements,
-    data: {},
   },
   sources: {
     upload: import('~/ui/upload'),
@@ -28,16 +27,22 @@ export default {
   },
   props: {
     proxies: {
-      cards: {},
+      cards: {
+        default: []
+      },
     },
     params: {
       type: {},
+      card: {
+        default: {}
+      }
     },
     methods: {
       ready: {},
       change: {},
-      setCards: {},
-      saveCards: {},
+      set: {},
+      add: {},
+      edit: {},
       remove: {},
       close: {}
     }
@@ -55,7 +60,9 @@ export default {
             label: 'Заполнение формы'
           },
           proxies: {
-            value: () => (this.proxy.progress * 100) / this.param.elements[this.param.type].length,
+            value: () => {
+              return (this.proxy.progress * 100) / this.param.elements[this.param.type].length
+            }
           }
         }
       },
@@ -65,7 +72,7 @@ export default {
           params: {
             name: 'list',
             label: 'Вернуться к списку',
-            icon: () => iconGenerate('1111000000111110000011110')
+            icon: () => iconGenerate('1110100000111010000011101')
           },
           methods: {
             action: this.method.list
@@ -113,12 +120,12 @@ export default {
   },
   methods: {
     action(name, value) {
-      if (this.param.data[name]) {
-        !value && this.proxy.progress--
-      } else {
-        value && this.proxy.progress++
-      }
-      this.param.data[name] = value
+      // if (this.param.card[name]) {
+      //   !value && this.proxy.progress--
+      // } else {
+      //   value && this.proxy.progress++
+      // }
+      this.param.card[name] = value
     },
     element(name) {
       this.proxy.index = name
@@ -126,7 +133,7 @@ export default {
       this.method.change(false)
     },
     save() {
-      this.method.saveCards(this.param.data)
+      this.method[this.param.type](this.param.card)
       this.method.close()
     },
     list() {
@@ -152,7 +159,9 @@ export default {
           }
         })
       }
-      this.method.ready()
+      await setTimeout(() => {
+        this.method.ready()
+      }, 500)
     }
   }
 }

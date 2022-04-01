@@ -9,36 +9,15 @@ class Iterator {
     length > this.nodeElement.children.length && await this.add(length)
     length < this.nodeElement.children.length && this.remove(length)
   }
-  async change(t, key, pr) {
-    // if (!path && Array.isArray(value)) {
-    //   this.set(value)
-    // }
-    // if (path && key < this.node.children.length) {
-    this.edit(t, key, pr)
-    // }
-  }
-  set(arr) {
-    for (const [pr, v] of Object.entries(this.props)) {
-      if (typeof v === 'function') {
-        for (let index = 0;index < arr.length;index++) {
-          this.nodeElement.power(index, pr, v(arr[index], index))
-        }
-      }
-    }
-  }
-  edit(value, index, pr) {
-    const v = this.props[pr]
-    if (index) {
-      this.nodeElement.power(index, pr, v(this.data[index], index))
-    } else {
-      for (let index = 0;index < this.nodeElement.children.length;index++) {
-        this.nodeElement.power(index, pr, v(this.data[index], index))
-      }
-    }
+  async set(arr) {
+    this.remove(0)
+    await this.add(arr.length)
   }
   async add(length) {
-    while (length > this.nodeElement.children.length) {
-      await this.append()
+    let qty = this.nodeElement.children.length
+    while (length > qty) {
+      await this.append(qty)
+      qty++
     }
   }
   remove(length) {

@@ -1,0 +1,67 @@
+.l-button {
+  line-height: 1.2;
+  font-size: var(--fs-xs);
+  padding: 1.1em;
+  box-sizing: border-box;
+  border: 0;
+  background-color: transparent;
+  color: inherit;
+  overflow: hidden;
+  align-items: center;
+  cursor: pointer;
+  font-family: inherit;
+  border-radius: 2px;
+  .label {
+    padding: 0 1.1em;
+    font-weight: 300;
+  }
+  .label:empty {
+    padding: 0;
+  }
+  .icon {
+    width: 1em;
+    height: 1em;
+  }
+  .icon:empty{
+    width: 0;
+    height: 0;
+  }
+  .icon:empty ~ .label {
+    padding: 0;
+  }
+  .l-preload {
+    height: 1em;
+    width: 1em;
+  }
+}
+.l-button.hide {
+  display: none;
+}
+
+.light-btn button.l-button {
+  color: var(--black);
+}
+.light-btn button.l-button svg {
+  fill: var(--black);
+}
+.light-btn button.l-button:active {
+  background-color: var(--light-gray);
+}
+.light-btn button.active {
+  background-color: var(--light-gray);
+}
+
+.dark-btn button.l-button {
+  color: white;
+  background-color: var(--dark);
+  margin-top: var(--s);
+}
+
+.dark-btn button.l-button svg {
+  fill: white;
+}
+
+
+/*.l-button .icon ~ .label {*/
+/*  padding-right: 0;*/
+/*}*/

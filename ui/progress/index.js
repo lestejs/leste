@@ -20,6 +20,13 @@ export default {
       action: {}
     }
   },
+  handlers: {
+    value(v) {
+      this.delay(() => {
+        this.node.line.style.width = v + '%'
+      }, 1000)
+    }
+  },
   nodes() {
     return {
       label: {
@@ -27,7 +34,7 @@ export default {
       },
       line: {
         style: () => {
-          return { width: this.proxy.value + '%' }
+          return { width: '0%' }
         }
       }
     }

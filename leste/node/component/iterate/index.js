@@ -25,18 +25,28 @@ export default async function iterate() {
     }
     return proxies
   }
-  const data = this.node.component.data
+  let data = this.node.component.data
   const component = new this.Component(this.node.component, this.context, this.keyNode, this.nodeElement, this.refs)
-  this.refs.length = 0
-  const length = typeof data === 'number' ? data : data.length
-  if (this.refs.length) {
-    const iterator = new Iterator(this.nodeElement, this.node.component.proxies, data, async() => {
-      await component.create(this.node.component.src, propProxies(data, data.length - 1, iterator), data[data.length - 1], data.length - 1)
+  // const length = typeof data === 'number' ? data : data.length
+  if (typeof data === 'number') {
+    // dfhdfhdf
+  } else if (data.length && Object.getPrototypeOf(this.node.component.data).instance === 'Proxy') {
+    const create = async(index) => {
+      await component.create(this.node.component.src, propProxies(this.node.component.data, index), this.node.component.data[index], index)
+    }
+    const iterator = new Iterator(this.nodeElement, this.node.component.proxies, this.node.component.data, create)
+    this.nodeElement.reactive([this.refs[0]], 'component', (t, p, v) => {
+      this.node.component.data = v
+      iterator.set.bind(iterator)(v)
     })
-    this.nodeElement.reactive([this.refs[0]], 'component', (t, p, v) => iterator.length.bind(iterator)(v))
-  }
-  for await (const [index, val] of data.entries()) {
-    const proxies = propProxies(data, index)
-    await component.create(this.node.component.src, proxies, val, index)
+    this.nodeElement.reactive([this.refs[1]], 'component', (t, p, v) => iterator.length.bind(iterator)(v))
+    for await (const [index] of data.entries()) {
+      await create(index)
+    }
+  } else {
+    for await (const [index, val] of data.entries()) {
+      const proxies = propProxies(data, index)
+      await component.create(this.node.component.src, proxies, val, index)
+    }
   }
 }

@@ -1,26 +1,53 @@
 import Store from '~/leste/store'
+import localforage from 'localforage'
+
+function generateId() {
+  return Math.random().toString(36).substring(2, 9)
+}
+
+
+const store = localforage.createInstance({
+  name: "todolist"
+})
 
 export default new Store({
   name: 'cards',
   proxies: {
     cards: [
       {
+        id: 'fgr64t43',
         url: 'https://worldclassmag.com/files/nodus_items/0004/2216/attaches/fuji.jpg',
-        label: 'links'
-      },
-      {
-        url: 'https://worldclassmag.com/files/nodus_items/0004/2216/attaches/fuji.jpg',
-        label: 'cards'
+        title: 'links',
+        desc: 'Big Shoes',
+        price: '$100'
       }
     ],
   },
   methods: {
-    setCards() {
-      this.proxy.cards = localStorage.getItem('cards')
+    set() {
+      store.getItem('cards').then((data)=> {
+        if (data) {
+          this.proxy.cards = data
+        }
+      })
     },
-    saveCards(card) {
-      this.proxy.cards.push(card)
-      // localStorage.setItem('cards', this.proxy.cards)
+    edit(card) {
+      const index = this.proxy.cards.findIndex(c => c.id === card.id)
+      const cards = this.extract(this.proxy.cards)
+      if (index !== -1) {
+        cards[index] = card
+      }
+      store.setItem('cards', cards).then(()=> {
+        this.proxy.cards[index] = card
+      })
+    },
+    add(card) {
+      card.id = generateId
+      const cards = this.extract(this.proxy.cards)
+      cards.push(card)
+      store.setItem('cards', cards).then(()=> {
+        this.proxy.cards.push(card)
+      })
     },
     remove(index) {
       this.proxy.cards.splice(index, 1)

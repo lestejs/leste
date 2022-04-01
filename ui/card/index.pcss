@@ -1,0 +1,48 @@
+.l-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--xxs);
+  width: fit-content;
+}
+.l-cards .l-card {
+  flex: 1 0 50%;
+}
+.l-card {
+  overflow: hidden;
+  width: max-content;
+  position: relative;
+  .wr-label{
+    position: relative;
+    overflow: hidden;
+  }
+  .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--gray300);
+    background-position: bottom;
+    background-size: cover;
+    filter: blur(100px);
+    transform: scale(1.5);
+  }
+  .label {
+    font-size: var(--fs-xs);
+    padding: var(--xxs);
+    z-index: 2;
+    position: relative;
+    justify-content: space-between;
+  }
+  .l-card-btn {
+    position: absolute;
+    top: var(--xxs);
+    right: var(--xxs);
+    z-index: 2;
+  }
+  .l-card-btn .l-button {
+    background-color: white;
+    padding: .5em;
+    border-radius: 50%;
+  }
+}

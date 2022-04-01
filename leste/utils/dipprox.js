@@ -34,6 +34,9 @@ function dipprox(target, handler) {
           return deleted
         }
         return false
+      },
+      getPrototypeOf(target) {
+        return {target, instance: 'Proxy'}
       }
     }
   }

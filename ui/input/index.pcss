@@ -1,0 +1,32 @@
+.l-input .label {
+  position: relative;
+  white-space: nowrap;
+  color: #777;
+  margin-bottom: .5em;
+}
+
+.l-input .label:empty {
+  margin-bottom: 0;
+}
+.error {
+  /*background-color: lightcoral;*/
+}
+.l-input {
+  font-size: var(--fs-xs);
+  min-height: 1em;
+  min-width: 100px;
+  margin-top: var(--xs);
+  background-color: var(--light-gray);
+  padding: .4em;
+}
+.l-input .field {
+  min-width: 10ch;
+  width: auto;
+  max-width: 40ch;
+}
+.field:focus {
+  outline: none;
+}
+.l-input.hide {
+  display: none;
+}

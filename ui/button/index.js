@@ -2,6 +2,7 @@ export default {
   template: `
   <button class="l-button fx fx-b br0">
     <span class="icon"></span>
+    <span class="l-preload"></span>
     <span class="label"></span>
   </button>`,
   props: {
@@ -9,7 +10,8 @@ export default {
       color: {},
       label: {},
       active: {},
-      hide: {}
+      hide: {},
+      loading: {}
     },
     params: {
       name: {},
@@ -38,8 +40,16 @@ export default {
           this.method.action(this.param.name)
         }
       },
+      'l-preload': {
+        classes: {
+          'hide': () => !this.proxy.loading
+        },
+      },
       'icon': {
-        innerHTML: () => this.param.icon
+        classes: {
+          'hide': () => this.proxy.loading
+        },
+        innerHTML: () =>  this.param.icon
       },
       'label': {
         textContent: () => this.param.label || this.proxy.label

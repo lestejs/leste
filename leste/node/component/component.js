@@ -1,4 +1,5 @@
 import { mount } from '../../mount'
+import extract from '../../utils/extract'
 
 class Component {
   constructor(component, context, keyNode, nodeElement, refs) {
@@ -28,7 +29,7 @@ class Component {
       for (const [pr, v] of Object.entries(params)) {
         if (typeof v === 'function' && v.name) {
           Object.assign(this.props.params, { [pr]: v(val, index) })
-        } else Object.assign(this.props.params, { [pr]: JSON.parse(JSON.stringify(v)) || v })
+        } else Object.assign(this.props.params, { [pr]: extract(v) || v })
       }
     }
   }
@@ -58,7 +59,7 @@ class Component {
       // this.propsProxy(val, index)
       if (src) {
         const component = await this.load(src)
-        await mount(this.nodeElement, component, this.props)
+        await mount(this.nodeElement, component, {...this.props})
       }
     } catch (e) {
       console.error(e)

@@ -3,11 +3,12 @@ import native from './nativeProperty'
 import component from './component'
 
 class Node {
-  constructor(node, keyNode, context, nodeElement, refs) {
+  constructor(node, keyNode, context, nodeElement, common) {
     this.node = node
     this.keyNode = keyNode
     this.context = context
-    this.refs = refs
+    this.common = common
+    this.refs = common.refs
     this.nodeElement = nodeElement
     this.nodeElement.reactive = (refs, name, active) => {
       if (refs.length) {

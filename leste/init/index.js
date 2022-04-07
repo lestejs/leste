@@ -1,15 +1,20 @@
 import { dipprox } from '../utils/dipprox'
+import { delay } from '../utils/delay'
+import release from '../utils/release'
 import Node from '../node'
-import hooks from './hooks'
 
 class Init {
-  constructor(component) {
+  constructor(component, mount, root, errors) {
     this.component = component
     if (!this.component.proxies) this.component.proxies = {}
-    this.refs = []
+    this.common = {
+      refs: [],
+      mount,
+      errors
+    }
     this.context = {
       options: component,
-      node: {},
+      node: { root },
       param: {},
       reactiveMap: {},
       method: {},
@@ -17,16 +22,21 @@ class Init {
       setter: {},
       handler: {},
       source: component.sources,
-      delay: (callback, delay) => {
-         return new Promise(resolve => {
-          const timer = setTimeout(() => {
-            callback && callback()
-            clearTimeout(timer)
-            resolve()
-          }, delay || 0)
-        })
-      }
+      delay
     }
+  }
+  async created() {
+    this.component.created && await this.component.created.bind(this.context)()
+  }
+  async loaded() {
+    this.component.loaded && await this.component.loaded.bind(this.context)()
+  }
+  async mounted() {
+    this.component.mounted && await this.component.mounted.bind(this.context)()
+  }
+  async unmounted() {
+    // document.removeEventListenerr
+    this.component.unmounted && await this.component.unmounted.bind(this.context)()
   }
   stores() {
     if (this.component.stores) {
@@ -41,14 +51,14 @@ class Init {
         if (store.proxies) {
           for (const key in store.proxies) {
             if (key in this.component.props.proxies) {
-              this.component.proxies[key] = JSON.parse(JSON.stringify(store.proxies[key]))
+              this.component.proxies[key] = release(store.proxies[key])
             }
           }
         }
         if (store.methods) {
           for (const key in store.methods) {
             if (key in this.component.props.methods) {
-              this.context.method[key] = store.methods[key].bind(store)
+              this.context.method[key] = (...args) => store.methods[key].bind(store)(...release(args))
             }
           }
         }
@@ -106,7 +116,7 @@ class Init {
           if (key in props.proxies) {
             this.component.proxies[key] = props.proxies[key]
             power[key] = (v) => {
-              this.context.proxy[key] = JSON.parse(JSON.stringify(v))
+              this.context.proxy[key] = release(v || false)
             }
           } else this.component.proxies[key] = false
         }
@@ -163,7 +173,7 @@ class Init {
   }
   proxies() {
     const self = this
-    this.context.proxy = dipprox(JSON.parse(JSON.stringify(this.component.proxies)), {
+    this.context.proxy = dipprox(release(this.component.proxies), {
       beforeSet(target, path, value, ref) {
         return self.context.setter[ref]?.bind(self.context)(value)
       },
@@ -183,7 +193,7 @@ class Init {
         return self.context.handler[ref]?.bind(self.context)(value)
       },
       get(target, path) {
-        self.refs.push(path.join('_'))
+        self.common.refs.push(path.join('_'))
       },
       deleteProperty(target, path) {
         console.log('delete', path.join('_'))
@@ -196,24 +206,25 @@ class Init {
       for await (const [keyNode, options] of Object.entries(nodes)) {
         const nodeElement = container.querySelector(`.${keyNode}`)
         Object.assign(this.context.node, { [keyNode]: nodeElement })
-        nodeElement.getContainer = (index) => nodeElement.children[index || 0]
-        nodeElement.unmount = async (index) => {
-          nodeElement.getContainer(index || 0).remove()
-          await this.unmounted()
-        }
-        nodeElement.power = (proxy, value, index) => {
-          nodeElement.getContainer(index).power[proxy](value)
-        }
-        const node = new Node(options, keyNode, this.context, nodeElement, this.refs)
-        for await (const [key, callback] of Object.entries(options)) {
-          node.native(key, callback)
-          if (key in node) {
-            await node[key](keyNode, callback)
+        if (options) {
+          nodeElement.getContainer = (index) => nodeElement.children[index || 0]
+          nodeElement.unmount = async (index) => {
+            nodeElement.getContainer(index || 0).remove()
+            await this.unmounted()
+          }
+          nodeElement.power = (proxy, value, index) => {
+            nodeElement.getContainer(index).power[proxy](value)
+          }
+          const node = new Node(options, keyNode, this.context, nodeElement, this.common)
+          for await (const [key, callback] of Object.entries(options)) {
+            node.native(key, callback)
+            if (key in node) {
+              await node[key](keyNode, callback)
+            }
           }
         }
       }
     }
   }
 }
-Object.assign(Init.prototype, hooks)
 export { Init }

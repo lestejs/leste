@@ -8,7 +8,7 @@ export default {
   fragments: {
     'group-first': `
       <div class="desc">Список полей для заполнения</div>
-      <div class="content"></div>
+      <div class="elements"></div>
       <div class="progress"></div>
       <div class="save dark-btn late"></div>`,
     'group-second': `
@@ -56,6 +56,8 @@ export default {
       'progress': {
         component: {
           src: progress,
+          type: 'inure',
+          precept: () => this.param.type === 'add',
           params: {
             label: 'Заполнение формы'
           },
@@ -79,7 +81,7 @@ export default {
           }
         }
       },
-      'content': {
+      'elements': {
         component: {
           src: btn,
           type: 'iterate',
@@ -120,11 +122,13 @@ export default {
   },
   methods: {
     action(name, value) {
-      // if (this.param.card[name]) {
-      //   !value && this.proxy.progress--
-      // } else {
-      //   value && this.proxy.progress++
-      // }
+      if (this.param.type === 'add') {
+        if (this.param.card[name]) {
+          !value && this.proxy.progress--
+        } else {
+          value && this.proxy.progress++
+        }
+      }
       this.param.card[name] = value
     },
     element(name) {
@@ -144,7 +148,7 @@ export default {
   async mounted() {
     if (this.param.type in this.param.elements) {
       for await (const element of this.param.elements[this.param.type]) {
-        await this.node.element.createComponent({
+        await this.node.element.create({
           src: this.source[element.type],
           name: element.name,
           params: {

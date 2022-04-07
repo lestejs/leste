@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wght@200;300;400;900&family=Noto+Sans:wght@300;400;700&family=Nunito+Sans:wght@200;300;400;600&display=swap');
 :root {
     --transition: .75s cubic-bezier(.2, .6,0, 1);
-    --ss: max(var(--m),5.5vw);
+    --ss: 2vw;
     --v-s: 1vmin;
     --v-m: 8vmin;
     --v-l: 30vmin;
@@ -59,7 +59,7 @@ a {
 }
 
 component {
-    display: initial;
+    display: contents;
 }
 
 .br {
@@ -78,4 +78,7 @@ component {
 }
 .jc-sb {
     justify-content: space-between;
+}
+.content {
+    padding: 0 var(--ss);
 }

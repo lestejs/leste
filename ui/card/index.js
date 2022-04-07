@@ -3,8 +3,11 @@ import image from '~/ui/image'
 
 export default {
   template: `
-    <div class="l-card">
-        <div class="l-card-btn"></div>
+    <a class="l-card" href="/product/1" link>
+        <div class="l-card-btn fx">
+          <div class="btn-first"></div>
+          <div class="btn-second"></div>
+        </div>
         <div class="l-card-image"></div>
         <div class="wr-label">
           <div class="background"> 
@@ -16,30 +19,61 @@ export default {
               <p><span class="price"></span></p>
             </div>
         </div>
-    </div>`,
+    </a>`,
   props: {
     params: {
-      button: {},
-      icon: {}
+      buttons: {},
     },
     proxies: {
       card: {}
     },
     methods: {
-      actionCard: {}
+      action: {}
     }
   },
   nodes() {
     return {
-      'l-card-btn': {
+      'l-card': {
+        classes: {
+          selected: () => this.proxy.card.selected
+        }
+      },
+      'wr-label': {
+        onclick: () => {
+          event.preventDefault()
+          event.stopPropagation()
+          this.method.actionCard('select')
+        }
+      },
+      'btn-first': {
+        onclick: (event) => {
+          event.preventDefault()
+          event.stopPropagation()
+        },
         component: {
           src: btn,
           params: {
-            name: this.param.button,
-            icon: () => this.param.icon,
+            name: this.param.buttons.first.name,
+            icon: this.param.buttons.first.icon,
           },
           methods: {
-            action: this.method.action
+            action: this.method.actionCard
+          }
+        }
+      },
+      'btn-second': {
+        onclick: (event) => {
+          event.preventDefault()
+          event.stopPropagation()
+        },
+        component: {
+          src: btn,
+          params: {
+            name: this.param.buttons.second.name,
+            icon: this.param.buttons.second.icon,
+          },
+          methods: {
+            action: this.method.actionCard
           }
         }
       },
@@ -68,8 +102,8 @@ export default {
     }
   },
   methods: {
-    action(name) {
-      this.method.actionCard(name, this.proxy.card)
+    actionCard(name) {
+      this.method.action(name, this.proxy.card)
     }
   }
 }

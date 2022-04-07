@@ -27,13 +27,13 @@ export default async function iterate() {
   }
   this.refs.length = 0
   let data = this.node.component.data
-  const length = data.length
-  const lengthPath = this.refs[0]
-  const arrPath = lengthPath.split('_')[0]
-  const component = new this.Component(this.node.component, this.context, this.keyNode, this.nodeElement, this.refs)
+  const component = new this.Component(this.node.component, this.context, this.keyNode, this.nodeElement, this.common)
   if (typeof data === 'number') {
     // dfhdfhdf
   } else if (Object.getPrototypeOf(this.node.component.data).instance === 'Proxy') {
+    const length = data.length
+    const lengthPath = this.refs[0]
+    const arrPath = lengthPath.split('_')[0]
     const create = async(index) => {
       await component.create(this.node.component.src, propProxies(this.node.component.data, index), this.node.component.data[index], index)
     }

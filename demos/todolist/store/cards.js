@@ -32,13 +32,13 @@ export default new Store({
     set() {
       store.getItem('cards').then((data)=> {
         if (data) {
-          this.proxy.cards.unshift(...data)
+          this.proxy.cards = data
         }
       })
     },
     edit(card) {
       const index = this.proxy.cards.findIndex(c => c.id === card.id)
-      const cards = this.extract(this.proxy.cards)
+      const cards = this.release(this.proxy.cards)
       if (index !== -1) {
         cards[index] = card
       }
@@ -47,15 +47,32 @@ export default new Store({
       })
     },
     add(card) {
-      card.id = generateId
-      const cards = this.extract(this.proxy.cards)
-      cards.push(card)
+      card.id = generateId()
+      const cards = this.release(this.proxy.cards)
+      cards.unshift(card)
       store.setItem('cards', cards).then(()=> {
-        this.proxy.cards.push(card)
+        this.proxy.cards.unshift(card)
       })
     },
-    remove(index) {
-      this.proxy.cards.splice(index, 1)
+    select(_, card) {
+      const index = this.proxy.cards.findIndex(c => c.id === card.id)
+      const cards = this.release(this.proxy.cards)
+      if (index !== -1) {
+        cards[index].selected = !cards[index].selected
+      }
+      store.setItem('cards', cards).then(()=> {
+        this.proxy.cards[index] = cards[index]
+      })
+    },
+    remove(_, card) {
+      const index = this.proxy.cards.findIndex(c => c.id === card.id)
+      const cards = this.release(this.proxy.cards)
+      if (index !== -1) {
+        cards.splice(index, 1)
+      }
+      store.setItem('cards', cards).then(()=> {
+        this.proxy.cards.splice(index, 1)
+      })
     }
   }
 })

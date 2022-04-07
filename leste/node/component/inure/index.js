@@ -1,5 +1,7 @@
 export default async function inure() {
-  const action = async() => {
+  this.refs.length = 0
+  const precept = this.node.component.precept()
+  this.nodeElement.reactive(this.refs, 'precept', async() => {
     if (this.node.component.precept()) {
       this.nodeElement.unmount()
       const { component, proxies } = this.simple()
@@ -7,10 +9,7 @@ export default async function inure() {
     } else {
       this.nodeElement.unmount()
     }
-  }
-  this.refs.length = 0
-  const precept = this.node.component.precept()
-  this.nodeElement.reactive(this.refs, 'precept', action)
+  })
   if (precept) {
     const { component, proxies } = this.simple()
     await component.create(this.node.component.src, proxies)

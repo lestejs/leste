@@ -29,6 +29,11 @@ export default {
       close: {}
     }
   },
+  handlers:{
+    open(v) {
+      v ? this.node.root.classList.add('open') : this.node.root.classList.remove('open')
+    }
+  },
   nodes() {
     return {
       close: {
@@ -45,7 +50,6 @@ export default {
       },
       'l-sidebar': {
         classes: {
-          open: () => this.proxy.open,
           mini: () => this.proxy.mini,
         }
       },

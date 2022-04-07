@@ -21,8 +21,10 @@ class Iterator {
     }
   }
   remove(length) {
-    while (length < this.nodeElement.children.length) {
-      this.nodeElement.lastElementChild.remove()
+    let qty = this.nodeElement.children.length
+    while (length < qty) {
+      qty--
+      this.nodeElement.unmount(qty)
     }
   }
 }

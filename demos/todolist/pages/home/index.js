@@ -33,10 +33,14 @@ export default {
   },
   props: {
     proxies: {
-      cards: {},
+      cards: {
+        default: []
+      },
     },
     methods: {
-      set: {}
+      set: {},
+      select: {},
+      remove: {}
     }
   },
   nodes() {
@@ -53,7 +57,7 @@ export default {
             loading: false
           },
           methods: {
-            action: this.method.add
+            action: this.method.action
           }
         }
       },
@@ -63,14 +67,22 @@ export default {
           data: this.proxy.cards,
           src: card,
           params: {
-            button: 'edit',
-            icon: () => iconGenerate('1100110010101001000111111')
+            buttons: {
+                first: {
+                  name: 'remove',
+                  icon: iconGenerate('0111000000011100111001110')
+                },
+                second: {
+                  name: 'edit',
+                  icon: iconGenerate('1100110010101001000111111')
+                }
+              }
           },
           proxies: {
             card: (element) => element
           },
           methods: {
-            actionCard: this.method.actionCard
+            action: this.method.action
           }
         }
       },
@@ -97,13 +109,15 @@ export default {
     change(v) {
       this.node.sidebar.power('start', v)
     },
-    open(card) {
-      !card && this.node.add.power('loading', true)
+    action(name, card) {
+      this.method[name](name, card)
+    },
+    add(name) {
+      this.node.add.power('loading', true)
       this.node.sidebar.integrate({
         src: this.source.edit,
         params: {
-          type:() => card ? 'edit' : 'add',
-          card: card
+          type: name,
         },
         methods: {
           ready: this.method.ready,
@@ -112,8 +126,19 @@ export default {
         }
       })
     },
-    actionCard(name, card) {
-      this.method.open(card)
+    edit(name, card) {
+      this.node.sidebar.integrate({
+        src: this.source.edit,
+        params: {
+          type: name,
+          card: card
+        },
+        methods: {
+          ready: this.method.ready,
+          change: this.method.change,
+          close: this.method.close
+        }
+      })
     },
     close() {
       this.node.sidebar.power('open', false)

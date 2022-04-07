@@ -1,9 +1,8 @@
-import { mount } from '../../mount'
-import extract from '../../utils/extract'
+import release from '../../utils/release'
 
 class Component {
-  constructor(component, context, keyNode, nodeElement, refs) {
-    this.refs = refs
+  constructor(component, context, keyNode, nodeElement, common) {
+    this.common = common
     this.component = component
     this.context = context
     this.keyNode = keyNode
@@ -18,7 +17,7 @@ class Component {
     if (methods) {
       for (const [pr, v] of Object.entries(methods)) {
         if (typeof v === 'function') {
-          Object.assign(this.props.methods, { [pr]: v.bind(this.context) })
+          Object.assign(this.props.methods, { [pr]: (...args) => v.bind(this.context)(...release(args)) })
         }
       }
     }
@@ -29,7 +28,7 @@ class Component {
       for (const [pr, v] of Object.entries(params)) {
         if (typeof v === 'function' && v.name) {
           Object.assign(this.props.params, { [pr]: v(val, index) })
-        } else Object.assign(this.props.params, { [pr]: extract(v) || v })
+        } else Object.assign(this.props.params, { [pr]: release(v) || v })
       }
     }
   }
@@ -59,7 +58,7 @@ class Component {
       // this.propsProxy(val, index)
       if (src) {
         const component = await this.load(src)
-        await mount(this.nodeElement, component, {...this.props})
+        await this.common.mount(this.nodeElement, component, {...this.props})
       }
     } catch (e) {
       console.error(e)

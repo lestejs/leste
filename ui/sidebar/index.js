@@ -20,7 +20,9 @@ export default {
   },
   props: {
     proxies: {
-      open: {},
+      open: {
+        default: false
+      },
       start: {
       },
       mini: {}

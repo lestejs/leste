@@ -49,7 +49,7 @@ export default {
         classes: {
           'hide': () => this.proxy.loading
         },
-        innerHTML: () =>  this.param.icon
+        innerHTML: () => this.param.icon
       },
       'label': {
         textContent: () => this.param.label || this.proxy.label
@@ -57,5 +57,5 @@ export default {
     }
   },
   methods: {
-  },
+  }
 }

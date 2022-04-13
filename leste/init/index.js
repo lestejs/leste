@@ -81,11 +81,14 @@ class Init {
     }
   }
   methods() {
+    const methods = {}
     if (this.component.methods) {
       for (const [key, method] of Object.entries(this.component.methods)) {
         this.context.method[key] = method.bind(this.context)
+        methods[key] = this.context.method[key]
       }
     }
+    return methods
   }
   setters() {
     if (this.component.setters) {
@@ -116,9 +119,9 @@ class Init {
           if (key in props.proxies) {
             this.component.proxies[key] = props.proxies[key]
             power[key] = (v) => {
-              this.context.proxy[key] = release(v || false)
+              this.context.proxy[key] = release(v)
             }
-          } else this.component.proxies[key] = false
+          } else this.component.proxies[key] = undefined
         }
       }
       if (props.methods && this.component.props.methods) {
@@ -131,10 +134,11 @@ class Init {
       if (props.params && this.component.props.params) {
         for (const key in this.component.props.params) {
           if (key in props.params) {
-            this.context.param[key] = props.params[key]
-          } else this.context.param[key] = false
+            this.context.param[key] = release(props.params[key])
+          } else this.context.param[key] = undefined
         }
       }
+
       this.validation()
     }
     return power
@@ -142,7 +146,7 @@ class Init {
   validation() {
     if (this.component.props.proxies) {
       for (const [key, pr] of Object.entries(this.component.props.proxies)) {
-        if (!this.component.proxies[key]) this.component.proxies[key] = pr.default
+        if (this.component.proxies[key]=== undefined || this.component.proxies[key]===null) this.component.proxies[key] = pr.default
         if (this.component.props.proxies[key].type) {
           if (!typeof this.component.proxies[key] === this.component.props.proxies[key].type) {
             console.error('Error props type')
@@ -162,7 +166,9 @@ class Init {
     }
     if (this.component.props.params) {
       for (const [key, pr] of Object.entries(this.component.props.params)) {
-        if (!this.context.param[key]) this.context.param[key] = pr.default
+        if (this.context.param[key] === undefined || this.context.param[key] === null) {
+          this.context.param[key] = pr.default
+        }
         if (this.component.props.params[key].type) {
           if (!typeof this.context.param[key] === this.component.props.params[key].type) {
             console.error('Error props type')
@@ -207,13 +213,13 @@ class Init {
         const nodeElement = container.querySelector(`.${keyNode}`)
         Object.assign(this.context.node, { [keyNode]: nodeElement })
         if (options) {
-          nodeElement.getContainer = (index) => nodeElement.children[index || 0]
+          nodeElement.cmp = (index) => nodeElement.children[index || 0]
           nodeElement.unmount = async (index) => {
-            nodeElement.getContainer(index || 0).remove()
+            nodeElement.cmp(index).remove()
             await this.unmounted()
           }
           nodeElement.power = (proxy, value, index) => {
-            nodeElement.getContainer(index).power[proxy](value)
+            nodeElement.cmp(index).power[proxy](value)
           }
           const node = new Node(options, keyNode, this.context, nodeElement, this.common)
           for await (const [key, callback] of Object.entries(options)) {

@@ -1,8 +1,12 @@
 .l-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--xxs);
-  width: fit-content;
+  //display: flex;
+  //flex-wrap: wrap;
+  //gap: var(--xxs);
+  width: auto;
+  display: grid;
+  grid-auto-rows: min-content auto;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  grid-gap: var(--xxs);
 }
 .selected:before {
   content: '';
@@ -14,7 +18,7 @@
   border: 2px solid var(--black);
 }
 .l-card {
-  flex: 1 1 30%;
+  //flex: 1 1 30%;
   min-width: 320px;
   position: relative;
   .wr-label{

@@ -5,6 +5,7 @@ import '~/ui/input/index.pcss'
 import '~/ui/button/index.pcss'
 import '~/ui/preload/index.pcss'
 import '~/ui/progress/index.pcss'
+import '~/ui/mesh/index.pcss'
 import '../components/forms/index.css'
 
 

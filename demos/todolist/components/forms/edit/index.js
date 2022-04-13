@@ -156,7 +156,8 @@ export default {
             label: element.label
           },
           proxies: {
-            hide: true
+            hide: true,
+            value: this.param.card[element.name],
           },
           methods: {
             action: this.method.action

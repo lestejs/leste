@@ -8,7 +8,7 @@ class Leste {
   }
   contain(entry, nodeElement) {
     if (entry.template) {
-      const container = document.createElement('component') // this.init.tag ||
+      const container = document.createElement('cmp') // this.init.tag ||
       nodeElement.appendChild(container)
       container.innerHTML = entry.template
       return container
@@ -43,12 +43,16 @@ class Leste {
       component.setters()
       component.handlers()
       component.params()
-      component.methods()
       const container = this.contain(entry, nodeElement)
       if (container.power) {
         Object.assign(container.power, component.props(props))
       } else {
         container.power = component.props(props)
+      }
+      if (container.method) {
+        Object.assign(container.method, component.methods())
+      } else {
+        container.method = component.methods()
       }
       component.proxies()
       await component.loaded()

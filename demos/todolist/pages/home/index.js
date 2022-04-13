@@ -147,5 +147,6 @@ export default {
   },
   mounted() {
     this.method.set()
+    this.node.root.classList.remove('open')
   }
 }

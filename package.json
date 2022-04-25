@@ -11,12 +11,16 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@parcel/transformer-inline-string": "^2.3.2",
     "@parcel/transformer-sass": "^2.3.2",
     "autoprefixer": "^10.4.2",
     "parcel": "^2.3.2",
-    "precss": "^4.0.0"
+    "precss": "^4.0.0",
+    "sharp": "^0.29.3"
   },
   "dependencies": {
-    "localforage": "^1.10.0"
+    "highlight.js": "^11.5.1",
+    "localforage": "^1.10.0",
+    "marked": "^4.0.14"
   }
 }

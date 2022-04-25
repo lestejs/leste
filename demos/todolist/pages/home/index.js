@@ -1,152 +1,81 @@
+import './index.pcss'
 import common from '../../layouts/common'
-import card from '~/ui/card'
-import cards from '../../store/cards'
-import sidebar from '~/ui/sidebar'
 import btn from '~/ui/button'
 import { iconGenerate } from '~/ui/icon'
+import icon1 from 'url:./icons/icons1.svg'
+import icon2 from 'url:./icons/icons2.svg'
+import icon3 from 'url:./icons/icons3.svg'
 
 export default {
-  fragments: {
-    wrapper: `
-    <div class="sidebar"></div>
-    <div class="content">
-      <div class="add dark-btn"></div>
-      <div class="l-cards"></div>
-    </div>`
-  },
+  template: `
+    <div class="main">
+      <h1>Light & simple javascript framework</h1>
+      <h3>Libraries change, javascript is eternal</h3>
+      <div class="buttons fx gap">
+        <div class="first dark-btn"></div>
+        <div class="second dark-btn"></div>
+      </div>
+    </div>
+    <div class="columns container">
+      <div class="column">
+        <img src="${icon1}" class="icon">
+        <h2>Simple</h2>
+        <p>A minimum of new syntax, especially native java script properties. Minimum weight, maximum performance.</p>
+      </div>
+      <div class="column">
+        <img src="${icon2}" class="icon">
+        <h2>Flexibility</h2>
+        <p>The flexible architecture of the framework makes it easy to make changes.</p>
+      </div>
+      <div class="column">
+        <img src="${icon3}" class="icon">
+        <h2>Complexity</h2>
+        <p>Optional installation, the ability to get everything right out of the box. Constant support and updating of modules.</p>
+      </div>
+    </div>
+    <div class="info container fx">
+      <div>
+        <h2>For whom?</h2>
+        <div class="bl">
+          <h4>simple single page websites</h4>
+          <p>the core weighs very little</p>
+        </div>
+        <div class="bl">
+          <h4>medium projects</h4>
+          <p>all the necessary functionality.</p>
+        </div>
+        <div class="bl">
+          <h4>large projects</h4>
+          <p>great flexibility and can be tailored to the needs of a particular business.</p>
+        </div>
+      </div>
+      <div class="image"
+
+      </div>
+    </div>`,
   layout: common,
-  sources: {
-    edit: import(`../../components/forms/edit`)
-  },
-  params: {
-    btnAdd: {
-      type: 'add',
-      label: 'add',
-      icon: '0010000100111110010000100'
-    }
-  },
-  proxies: {
-    open: false
-  },
-  stores: {
-    cards
-  },
-  props: {
-    proxies: {
-      cards: {
-        default: []
-      },
-    },
-    methods: {
-      set: {},
-      select: {},
-      remove: {}
-    }
-  },
   nodes() {
     return {
-      add: {
+      first: {
         component: {
           src: btn,
           params: {
-            name: this.param.btnAdd.type,
-            label: this.param.btnAdd.label,
-            icon: () => iconGenerate(this.param.btnAdd.icon),
-          },
-          proxies: {
-            loading: false
-          },
-          methods: {
-            action: this.method.action
+            label: 'Get Started',
+            icon: iconGenerate('0000000111111111111100000')
           }
         }
       },
-      'l-cards': {
+      second: {
         component: {
-          type: 'iterate',
-          data: this.proxy.cards,
-          src: card,
+          src: btn,
           params: {
-            buttons: {
-                first: {
-                  name: 'remove',
-                  icon: iconGenerate('0111000000011100111001110')
-                },
-                second: {
-                  name: 'edit',
-                  icon: iconGenerate('1100110010101001000111111')
-                }
-              }
-          },
-          proxies: {
-            card: (element) => element
-          },
-          methods: {
-            action: this.method.action
-          }
-        }
-      },
-      sidebar: {
-        component: {
-          type: 'integrate',
-          src: sidebar,
-          proxies: {
-            open: false,
-            start: true
-          },
-          methods: {
-            close: this.method.close
+            label: 'GitHub',
+            icon: iconGenerate('0100101111011111111000110')
           }
         }
       }
     }
   },
-  methods: {
-    ready() {
-      this.node.sidebar.power('open', true)
-      this.node.add.power('loading', false)
-    },
-    change(v) {
-      this.node.sidebar.power('start', v)
-    },
-    action(name, card) {
-      this.method[name](name, card)
-    },
-    add(name) {
-      this.node.add.power('loading', true)
-      this.node.sidebar.integrate({
-        src: this.source.edit,
-        params: {
-          type: name,
-        },
-        methods: {
-          ready: this.method.ready,
-          change: this.method.change,
-          close: this.method.close
-        }
-      })
-    },
-    edit(name, card) {
-      this.node.sidebar.integrate({
-        src: this.source.edit,
-        params: {
-          type: name,
-          card: card
-        },
-        methods: {
-          ready: this.method.ready,
-          change: this.method.change,
-          close: this.method.close
-        }
-      })
-    },
-    close() {
-      this.node.sidebar.power('open', false)
-      this.method.change(true)
-    },
-  },
   mounted() {
-    this.method.set()
-    this.node.root.classList.remove('open')
   }
 }

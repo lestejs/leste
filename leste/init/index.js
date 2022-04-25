@@ -107,7 +107,7 @@ class Init {
   params() {
     if (this.component.params) {
       for (const key in this.component.params) {
-        this.context.param[key] = {...this.component.params[key]}
+        this.context.param[key] = this.component.params[key]
       }
     }
   }
@@ -134,7 +134,7 @@ class Init {
       if (props.params && this.component.props.params) {
         for (const key in this.component.props.params) {
           if (key in props.params) {
-            this.context.param[key] = release(props.params[key])
+            this.context.param[key] = props.params[key] // release(props.params[key])
           } else this.context.param[key] = undefined
         }
       }

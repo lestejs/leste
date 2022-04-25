@@ -28,7 +28,7 @@ class Component {
       for (const [pr, v] of Object.entries(params)) {
         if (typeof v === 'function' && v.name) {
           Object.assign(this.props.params, { [pr]: v(val, index) })
-        } else Object.assign(this.props.params, { [pr]: release(v) || v })
+        } else Object.assign(this.props.params, { [pr]: v }) // release(v) ||
       }
     }
   }

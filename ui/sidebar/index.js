@@ -5,20 +5,18 @@ import { iconGenerate } from '~/ui/icon'
 export default {
   template: `
     <div class="l-sidebar w-side">
-      <div class="close"></div>
+      <div class="close fx"></div>
       <div class="group-first shift">
       </div>
       <div class="group-second shift">
       </div>
     </div>`,
-  params: {
-    btnClose: {
-      type: 'close',
-      label: '',
-      icon: '1000101010001000101010001'
-    }
-  },
   props: {
+    params:{
+      close: {},
+      top: {},
+      width: {}
+    },
     proxies: {
       open: {
         default: false
@@ -40,13 +38,18 @@ export default {
     return {
       close: {
         component: {
+          type: 'inure',
+          precept: () => this.param.close || false,
           src: btn,
           params: {
-            name: () => this.param.btnClose.type,
-            icon: () => iconGenerate(this.param.btnClose.icon)
+            name: () => 'close',
+            icon: () => this.param.close
           },
           methods: {
-            action: this.method.close
+            action: () => {
+              this.proxy.open = false
+              this.method.close && this.method.close()
+            }
           }
         }
       },
@@ -70,5 +73,8 @@ export default {
     }
   },
   mounted() {
+    this.param.width && this.node.root.style.setProperty('--sidebar-width', this.param.width)
+    this.param.top && this.node.root.style.setProperty('--sidebar-width', this.param.top)
+    this.handler.open(this.proxy.open)
   }
 }

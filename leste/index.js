@@ -13,7 +13,7 @@ class Leste {
       container.innerHTML = entry.template
       return container
     } else if (entry.fragments) {
-      const container = this.getElement()
+      const container = entry.layout ? this.getElement() : nodeElement.firstChild
       for (const [key, fr] of Object.entries(entry.fragments)) {
         const place = container.querySelector(`.${key}`)
         place.innerHTML = fr
@@ -44,6 +44,7 @@ class Leste {
       component.handlers()
       component.params()
       const container = this.contain(entry, nodeElement)
+      console.dir(container)
       if (container.power) {
         Object.assign(container.power, component.props(props))
       } else {

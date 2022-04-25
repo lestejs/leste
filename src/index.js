@@ -1,5 +1,5 @@
 import '~/demos/todolist/styles'
-// import component from '~/demos/todolist/pages/home'
+// import component from '~/demos/todolist/pages/catalog'
 // import { mount } from '~/leste'
 
 const root = document.querySelector('#root')

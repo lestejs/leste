@@ -52,7 +52,7 @@ export default class Router {
             document.title = route.name || 'Leste'
             this.current?.cache && this.current.props.unmount()
             if (!route.cache) {
-              const src = await route.component
+              const src = await route.component()
               route.cache = src.default
               route.cache.path = route.path
               route.props = {navigate: {push: this.push, ...this.to }}

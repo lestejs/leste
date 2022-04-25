@@ -1,8 +1,9 @@
-export default function simple() {
-  const component = new this.Component(this.node.component, this.context, this.keyNode, this.nodeElement, this.common)
+export default function simple(options) {
+  const component = new this.Component(options || this.node.component, this.context, this.keyNode, this.nodeElement, this.common)
   const proxies = {}
-  if (this.node.component.proxies) {
-    for (const [pr, v] of Object.entries(this.node.component.proxies)) {
+  const props = options?.proxies || this.node.component.proxies
+  if (props) {
+    for (const [pr, v] of Object.entries(props)) {
       if (typeof v === 'function' && v.name) {
         this.refs.length = 0
         Object.assign(proxies, { [pr]: v() })

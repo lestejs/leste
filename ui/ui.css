@@ -3,17 +3,17 @@
     --transition: .75s cubic-bezier(.2, .6,0, 1);
     --ss: 2vw;
     --sm: 4vw;
-    --vs: 1vmin;
+    --vs: 5vmin;
     --vm: 8vmin;
-    --vl: 30vmin;
+    --vl: 15vmin;
     --top-space: 8vmin;
     --max-width: 1330px;
     --fs-xxs: 14px;
     --fs-xs: 16px;
-    --fs-s: 1.2rem;
+    --fs-s: 1.1rem;
     --fs-m: 2.6rem;
-    --fs-l: 3.2rem;
-    --fs-xl: 5.5rem;
+    --fs-l: 3rem;
+    --fs-xl: 5rem;
     --xxs: .55rem;
     --xs: 1.4rem;
     --s: 2.2rem;
@@ -28,8 +28,8 @@
     --gray100: #e8e8e8;
     --gray200: #dbdbdb;
     --gray300: #a5a5a5;
-    --gray400: #888;
-    --gray500: #222;
+    --gray400: #777;
+    --gray500: #3a3a3a;
     --gray900: #151515;
     --black: #1f1f1f;
     --dark: #10080a
@@ -60,6 +60,7 @@ a {
     cursor: pointer;
 }
 h1, h2, h3 {
+    color: var(--gray900);
     font-weight: 400;
     letter-spacing: -0.005em;
     margin-bottom: .5em;
@@ -99,5 +100,5 @@ cmp {
     position: relative;
     max-width: var(--max-width);
     margin: 0 auto;
-    padding: var(--v-m) var(--ss);
+    padding: var(--vm) var(--ss);
 }

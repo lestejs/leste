@@ -9,7 +9,7 @@ export default function simple(options) {
         Object.assign(proxies, { [pr]: v() })
         this.nodeElement.reactive(this.refs, 'component', () => {
           const value = v()
-          this.nodeElement.power(pr, value)
+          this.nodeElement.proxy[pr] = value
         })
       } else Object.assign(proxies, { [pr]: v })
     }

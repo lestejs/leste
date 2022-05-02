@@ -1,39 +1,96 @@
-:root {
-  --sidebar-top: var(--m);
+#root {
+  position: relative;
+  height: 100vh;
+  overflow: auto;
+  scroll-snap-type: y proximity;
+}
+.scroll-snap {
+  scroll-snap-align: start;
+  scroll-margin-top: var(--xl);
 }
 header {
-  font-weight: 600;
-  position: fixed;
+  display: flex;
+  position: sticky;
   top: 0;
   width: 100%;
-  /* height: var(--sidebar-top); */
-  padding: .6em var(--xs);
+  padding: .3em var(--xs);
   align-items: center;
   font-size: var(--fs-xs);
   background-color: white;
+  /* box-shadow: 0 2px 5px #00000014; */
   border-bottom: 1px solid var(--light-gray);
+  color: var(--gray900);
   z-index: 10;
   .logo {
-    height: var(--xs);
+    height: 1.8em;
+    margin-right: var(--m);
+  }
+  .l-button .label {
+    font-weight: 600;
+  }
+  .lang {
+    margin-left: .5em;
+    margin-right: -1em;
   }
   nav {
+    font-weight: 600;
     margin-left: auto;
     align-items: center;
+    display: flex;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    position: relative;
+  }
+  nav:after {
+    position: absolute;
+    display: block;
+    content: '';
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 15px;
+    z-index: 1;
+    box-shadow: -10px 0 5px 0 rgba(255, 255, 255, 1) inset;
+  }
+
+
+  nav::-webkit-scrollbar {
+    width: 0;
+    height: 0;
   }
   nav > * {
-      padding: var(--xxs);
+      padding: 1.1em;
   }
   nav > div {
     margin-left: var(--s);
   }
 }
-.wrapper {
-  padding-top: var(--sidebar-top);
+.sideNav {
+  display: none;
+  position: relative;
+  margin-left: calc(-1 * var(--s));
+}
+[name='guide'] .sideNav {
+  display: block;
 }
 .open .sideNav{
   display: none;
 }
-
+.dropdown .l-window {
+  columns: 4 var(--xl);
+  column-gap: var(--m);
+  h3 {
+    color: var(--gray900);
+    font-weight: 600;
+    margin-bottom: 0.8em;
+  }
+  div {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: var(--m);
+  }
+}
 @media only screen and (max-width: 1440px) {
   #root .close {
     visibility: visible;
@@ -44,15 +101,27 @@ header {
 }
 @media only screen and (max-width: 1024px) {
   #root {
+    .l-dropdown {
+      padding: var(--m) var(--xs);
+    }
     .content > * {
       width: 100%;
-      max-width: 100%;
     }
-
-    .content pre {
-      float: left;
-      padding-left: 0;
+    .content .notice {
+      padding: var(--m) var(--sm);
+      border: 0;
       margin-left: calc(-1 * (var(--xs)));
+    }
+    .content pre {
+      float: none;
+      display: grid;
+      padding-left: 0;
+      margin-left: calc(-1 * (var(--sm)));
+      width: calc(100% + var(--sm) + var(--sm));
+    }
+    .content .hljs {
+      border-radius: 0;
+      border: 0;
     }
   }
 }

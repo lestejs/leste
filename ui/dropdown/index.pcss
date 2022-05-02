@@ -1,0 +1,35 @@
+.l-dropdown {
+  position: absolute;
+  z-index: 99;
+  inset: auto 0 auto auto;
+  width: max-content;
+  background-color: white;
+  border-radius: 10px;
+  padding:  var(--s);
+  transform: translate3d(0, 0, 0);
+  border: 1px solid var(--light-gray);
+  box-shadow: 0 3px 5px #00000014;
+  .l-window {
+    transition: transform 2s cubic-bezier(0.24, 0.22, 0.015, 1.56) 0s, opacity 1s ease-in-out 0s;
+  }
+}
+.l-dropdown.hide {
+  display: none;
+}
+.l-relative {
+  position: relative;
+}
+#root.l-no-scroll {
+  overflow: hidden;
+}
+@media only screen and (max-width: 1024px) {
+  .l-dropdown {
+    position: fixed;
+    right: 0;
+    max-width: 100%;
+  }
+}
+
+/*.l-button .icon ~ .label {*/
+/*  padding-right: 0;*/
+/*}*/

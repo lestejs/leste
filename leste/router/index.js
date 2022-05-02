@@ -11,6 +11,9 @@ export default class Router {
     this.addListener()
     this.update()
   }
+  setName(name) {
+    this.root.setAttribute('name', name)
+  }
   addListener() {
     window.addEventListener('popstate', () => {
       this.update()
@@ -49,7 +52,8 @@ export default class Router {
           if (this.current?.cache && (route.path === this.current.cache.path)) {
             this.current.props.routeUpdate(this.from, this.to)
           } else {
-            document.title = route.name || 'Leste'
+            document.title = route.title || 'Leste'
+            this.setName(route.name)
             this.current?.cache && this.current.props.unmount()
             if (!route.cache) {
               const src = await route.component()

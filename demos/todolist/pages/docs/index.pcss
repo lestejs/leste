@@ -55,7 +55,7 @@
     padding: var(--xs);
     /* margin-left: calc(-1 * (var(--xs))); */
     box-sizing: content-box;
-    border-radius: 10px;
+    border-radius: 6px;
     line-height: 1.2;
   }
   .notice {
@@ -94,6 +94,8 @@
     max-width: 60ch;
   }
   h1, h2, h3 {
+    scroll-snap-align: start;
+    scroll-margin-top: var(--vs);
     font-size: var(--fs-m);
     width: 100%;
     clear: both;
@@ -108,6 +110,9 @@
       width: 100%;
       border-bottom: 1px solid var(--light-gray);
     }
+  }
+  h1:first-child {
+    scroll-margin-top: 999px;
   }
   pre {
     width: 55%;

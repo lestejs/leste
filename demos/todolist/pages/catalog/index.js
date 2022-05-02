@@ -108,17 +108,17 @@ export default {
   },
   methods: {
     ready() {
-      this.node.sidebar.power('open', true)
-      this.node.add.power('loading', false)
+      this.node.sidebar.proxy.open = true
+      this.node.add.proxy.loading = false
     },
     change(v) {
-      this.node.sidebar.power('start', v)
+      this.node.sidebar.proxy.start = v
     },
     action(name, card) {
       this.method[name](name, card)
     },
     add(name) {
-      this.node.add.power('loading', true)
+      this.node.add.proxy.loading = true
       this.node.sidebar.integrate({
         src: this.source.edit,
         params: {

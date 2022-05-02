@@ -11,7 +11,8 @@ class Init {
       refs: [],
       mount,
       errors
-    }
+    },
+    this.storesListners = {}
     this.context = {
       options: component,
       node: { root },
@@ -35,7 +36,9 @@ class Init {
     this.component.mounted && await this.component.mounted.bind(this.context)()
   }
   async unmounted() {
-    // document.removeEventListenerr
+    for (let store of Object.values(this.component.stores)) {
+      document.addEventListener(store.name)
+    }
     this.component.unmounted && await this.component.unmounted.bind(this.context)()
   }
   stores() {
@@ -63,7 +66,7 @@ class Init {
           }
         }
         const name = store.name
-        document.addEventListener(name, (e) => {
+        const handler = (e) => {
           const {path, value} = e.detail
           if (store.proxies && (path[0] in this.component.props.proxies)) {
             let target = this.context.proxy
@@ -76,19 +79,19 @@ class Init {
               target[path[0]] = value
             }
           }
-        }, false)
+        }
+        document.addEventListener(name, handler, false)
       }
     }
   }
-  methods() {
-    const methods = {}
+  methods(container) {
+    if (!container.method) container.method = {}
     if (this.component.methods) {
       for (const [key, method] of Object.entries(this.component.methods)) {
         this.context.method[key] = method.bind(this.context)
-        methods[key] = this.context.method[key]
+        container.method[key] = (...args) => this.context.method[key](...release(args))
       }
     }
-    return methods
   }
   setters() {
     if (this.component.setters) {
@@ -111,16 +114,20 @@ class Init {
       }
     }
   }
-  props(props) {
-    const power = {}
+  props(props, container) {
+    if (!container.proxy) container.proxy = {}
+    const context = this.context
     if (this.component.props) {
       if (props.proxies && this.component.props.proxies) {
         for (const key in this.component.props.proxies) {
           if (key in props.proxies) {
             this.component.proxies[key] = props.proxies[key]
-            power[key] = (v) => {
-              this.context.proxy[key] = release(v)
-            }
+            console.log(container, key)
+            Object.defineProperty(container.proxy, key, {
+              set(value) {
+                context.proxy[key] = release(value)
+              }
+            })
           } else this.component.proxies[key] = undefined
         }
       }
@@ -134,14 +141,12 @@ class Init {
       if (props.params && this.component.props.params) {
         for (const key in this.component.props.params) {
           if (key in props.params) {
-            this.context.param[key] = props.params[key] // release(props.params[key])
+            this.context.param[key] = release(props.params[key])
           } else this.context.param[key] = undefined
         }
       }
-
       this.validation()
     }
-    return power
   }
   validation() {
     if (this.component.props.proxies) {
@@ -210,17 +215,9 @@ class Init {
     if (this.component.nodes) {
       const nodes = this.component.nodes.bind(this.context)()
       for await (const [keyNode, options] of Object.entries(nodes)) {
-        const nodeElement = container.querySelector(`.${keyNode}`)
+        const nodeElement = container.querySelector(`.${keyNode}`) || container.classList.contains(keyNode) && container
         Object.assign(this.context.node, { [keyNode]: nodeElement })
         if (options) {
-          nodeElement.cmp = (index) => nodeElement.children[index || 0]
-          nodeElement.unmount = async (index) => {
-            nodeElement.cmp(index).remove()
-            await this.unmounted()
-          }
-          nodeElement.power = (proxy, value, index) => {
-            nodeElement.cmp(index).power[proxy](value)
-          }
           const node = new Node(options, keyNode, this.context, nodeElement, this.common)
           for await (const [key, callback] of Object.entries(options)) {
             node.native(key, callback)

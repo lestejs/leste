@@ -1,6 +1,6 @@
 export default {
   template: `
-  <button class="l-button fx fx-b br0">
+  <button class="l-button fx-b br0">
     <span class="icon"></span>
     <span class="l-preload"></span>
     <span class="label"></span>

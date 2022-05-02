@@ -1,11 +1,14 @@
 import simple from './simple'
 import iterate from './iterate/index'
-import advance from './advance'
-import inure from './inure'
+import induce from './induce'
 import integrate from './integrate'
 import { Component } from './component'
 
 async function component() {
+  this.nodeElement.advance = async(options) => {
+    const component = new this.Component(options, this.context, this.keyNode, this.nodeElement, this.common)
+    await component.create(options.src, options.proxies, null, true)
+  }
   if (this.node.component.type in this) {
     this[this.node.component.type]()
   } else {
@@ -14,4 +17,4 @@ async function component() {
   }
 }
 
-export default { Component, component, simple, iterate, advance, inure, integrate }
+export default { Component, component, simple, iterate, induce, integrate }

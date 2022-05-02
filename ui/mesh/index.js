@@ -42,17 +42,20 @@ export default {
     }
   },
   methods: {
-    cell(y, x) {
+    tiles(y, x) {
       return this.node.tbody.children[y].children[x]
     },
+    inf(y, x) {
+      return this.node.tbody.children[y].children[x].className
+    },
     add(y, x, type) {
-      this.method.cell(y, x).classList.add(type)
+      this.method.tiles(y, x).classList.add(type)
     },
     remove(y, x, type) {
-      this.method.cell(y, x).classList.remove(type)
+      this.method.tiles(y, x).classList.remove(type)
     },
     contains(y, x, type) {
-      this.method.cell(y, x).classList.contains(type)
+      this.method.tiles(y, x).classList.contains(type)
     }
   }
 }

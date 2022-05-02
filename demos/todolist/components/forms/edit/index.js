@@ -53,10 +53,10 @@ export default {
   },
   nodes() {
     return {
-      'progress': {
+      progress: {
         component: {
           src: progress,
-          type: 'inure',
+          type: 'induce',
           precept: () => this.param.type === 'add',
           params: {
             label: 'Заполнение формы'
@@ -81,7 +81,7 @@ export default {
           }
         }
       },
-      'elements': {
+      elements: {
         component: {
           src: btn,
           type: 'iterate',
@@ -100,12 +100,10 @@ export default {
           }
         }
       },
-      'element': {
-        component: {
-          type: 'advance'
-        }
+      element: {
+        component: {}
       },
-      'save': {
+      save: {
         component: {
           src: btn,
           params: {
@@ -133,7 +131,7 @@ export default {
     },
     element(name) {
       this.proxy.index = name
-      this.node.element.power('hide', false, this.proxy.index)
+      this.node.element.children[this.proxy.index].proxy.hide = false
       this.method.change(false)
     },
     save() {
@@ -141,14 +139,14 @@ export default {
       this.method.close()
     },
     list() {
-      this.proxy.index !== null && this.node.element.power('hide', true, this.proxy.index)
+      if (this.proxy.index !== null) this.node.element.children[this.proxy.index].proxy.hide = true
       this.method.change(true)
     }
   },
   async mounted() {
     if (this.param.type in this.param.elements) {
       for await (const element of this.param.elements[this.param.type]) {
-        await this.node.element.create({
+        await this.node.element.advance({
           src: this.source[element.type],
           name: element.name,
           params: {

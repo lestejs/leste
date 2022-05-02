@@ -24,7 +24,7 @@ class Iterator {
     let qty = this.nodeElement.children.length
     while (length < qty) {
       qty--
-      this.nodeElement.unmount(qty)
+      this.nodeElement.children[qty].unmount()
     }
   }
 }

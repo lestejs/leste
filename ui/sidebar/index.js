@@ -38,7 +38,7 @@ export default {
     return {
       close: {
         component: {
-          type: 'inure',
+          type: 'induce',
           precept: () => this.param.close || false,
           src: btn,
           params: {

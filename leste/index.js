@@ -6,14 +6,12 @@ class Leste {
     this.root = root
     this.getElement = null
   }
-  contain(entry, nodeElement) {
+  contain(entry, nodeElement, iterate) {
     if (entry.template) {
-      const container = document.createElement('cmp') // this.init.tag ||
-      nodeElement.appendChild(container)
-      container.innerHTML = entry.template
-      return container
+      nodeElement.insertAdjacentHTML("beforeEnd", entry.template)
+      return iterate ? nodeElement.lastChild : nodeElement
     } else if (entry.fragments) {
-      const container = entry.layout ? this.getElement() : nodeElement.firstChild
+      const container = entry.layout ? this.getElement() : nodeElement
       for (const [key, fr] of Object.entries(entry.fragments)) {
         const place = container.querySelector(`.${key}`)
         place.innerHTML = fr
@@ -21,7 +19,7 @@ class Leste {
       return container
     }
   }
-  async mount(nodeElement, entry, props = {}) {
+  async mount(nodeElement, entry, props = {}, iterate) {
     let instance = {}
     if (entry) {
       if (entry.layout && !this.getElement) {
@@ -43,18 +41,13 @@ class Leste {
       component.setters()
       component.handlers()
       component.params()
-      const container = this.contain(entry, nodeElement)
-      console.dir(container)
-      if (container.power) {
-        Object.assign(container.power, component.props(props))
-      } else {
-        container.power = component.props(props)
+      const container = this.contain(entry, nodeElement, iterate)
+      container.unmount = async () => {
+        container.remove()
+        await component.unmounted()
       }
-      if (container.method) {
-        Object.assign(container.method, component.methods())
-      } else {
-        container.method = component.methods()
-      }
+      component.props(props, container)
+      component.methods(container)
       component.proxies()
       await component.loaded()
       await component.nodes(container)

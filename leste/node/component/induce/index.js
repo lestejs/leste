@@ -1,4 +1,4 @@
-export default async function inure() {
+export default async function induce() {
   this.refs.length = 0
   const precept = this.node.component.precept()
   this.nodeElement.reactive(this.refs, 'precept', async() => {

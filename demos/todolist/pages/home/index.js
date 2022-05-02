@@ -2,33 +2,27 @@ import './index.pcss'
 import common from '../../layouts/common'
 import btn from '~/ui/button'
 import { iconGenerate } from '~/ui/icon'
-import icon1 from 'url:./icons/icons1.svg'
-import icon2 from 'url:./icons/icons2.svg'
-import icon3 from 'url:./icons/icons3.svg'
 
 export default {
   template: `
     <div class="main">
       <h1>Light & simple javascript framework</h1>
       <h3>Libraries change, javascript is eternal</h3>
-      <div class="buttons fx gap">
+      <div class="buttons fx">
         <div class="first dark-btn"></div>
         <div class="second dark-btn"></div>
       </div>
     </div>
     <div class="columns container">
       <div class="column">
-        <img src="${icon1}" class="icon">
         <h2>Simple</h2>
         <p>A minimum of new syntax, especially native java script properties. Minimum weight, maximum performance.</p>
       </div>
       <div class="column">
-        <img src="${icon2}" class="icon">
         <h2>Flexibility</h2>
         <p>The flexible architecture of the framework makes it easy to make changes.</p>
       </div>
       <div class="column">
-        <img src="${icon3}" class="icon">
         <h2>Complexity</h2>
         <p>Optional installation, the ability to get everything right out of the box. Constant support and updating of modules.</p>
       </div>

@@ -1,3 +1,4 @@
 export default [
-  'Error props type'
+  'Error props type',
+  'Node with ingrate must bu empty'
 ]

@@ -32,16 +32,6 @@ class Component {
       }
     }
   }
-  // propsProxy(val, index) {
-  //   const proxy = this.init.proxy
-  //   if (proxy) {
-  //     for (const [pr, v] of Object.entries(proxy)) {
-  //       if (typeof v === 'function' && v.name) {
-  //         Object.assign(this.props.proxy, { [pr]: v(val, index) })
-  //       }
-  //     }
-  //   }
-  // }
   async load(src) {
     if (src instanceof Promise) {
       const res = await src
@@ -55,10 +45,9 @@ class Component {
       this.propsMethods()
       this.propsParams(val, index)
       if (proxies) this.props.proxies = proxies
-      // this.propsProxy(val, index)
       if (src) {
         const component = await this.load(src)
-        await this.common.mount(this.nodeElement, component, {...this.props})
+        await this.common.mount(this.nodeElement, component, {...this.props}, index !== undefined)
       }
     } catch (e) {
       console.error(e)

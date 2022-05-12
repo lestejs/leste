@@ -1,5 +1,5 @@
-import { dipprox } from '../utils/dipprox'
-import release from '../utils/release'
+import { dipprox } from '../leste/utils/dipprox'
+import release from '../leste/utils/release'
 
 export default class Store {
   constructor(options) {

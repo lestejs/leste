@@ -1,13 +1,17 @@
 import './index.pcss'
+import logo from 'url:./leste-mini.svg'
 import common from '../../layouts/common'
 import btn from '~/ui/button'
 import { iconGenerate } from '~/ui/icon'
 
 export default {
-  template: `
-    <div class="main">
-      <h1>Light & simple javascript framework</h1>
-      <h3>Libraries change, javascript is eternal</h3>
+  fragments: {
+    wrapper: `
+    <div class="main container">
+      <img src="" class="main-logo">
+      <h2>Light & Simple</h2>
+      <h1>Javascript Framework</h1>
+      <h3>Leste это комплеес решений, написаный на чистом js. Libraries change, javascript is eternal!</h3>
       <div class="buttons fx">
         <div class="first dark-btn"></div>
         <div class="second dark-btn"></div>
@@ -15,41 +19,40 @@ export default {
     </div>
     <div class="columns container">
       <div class="column">
-        <h2>Simple</h2>
-        <p>A minimum of new syntax, especially native java script properties. Minimum weight, maximum performance.</p>
+        <div class="icon">${iconGenerate('0000000111111111110000000')}</div>
+        <h2>Скорость</h2>
+        <p>Простая лаконичная архитектура. Крайне малый вес ядра фреймворка. Точечный рендеринг. Все это дает максимальную скорость работы вашего приложения.</p>
       </div>
       <div class="column">
-        <h2>Flexibility</h2>
-        <p>The flexible architecture of the framework makes it easy to make changes.</p>
+        <div class="icon">${iconGenerate('0000011110111101000000000')}</div>
+        <h2>Независимость</h2>
+        <p>Минимум зависимостей от других библиотек. Преимущественно нативные свойства javaScript. Фреймворк мотивирует изучать javaScript а не сам фреймворк.</p>
       </div>
       <div class="column">
-        <h2>Complexity</h2>
-        <p>Optional installation, the ability to get everything right out of the box. Constant support and updating of modules.</p>
+        <div class="icon">${iconGenerate('0000011000111111100000000')}</div>
+        <h2>Надежность</h2>
+        <p>Строгие принципы фреймворка позволяют минимизировать количество ошибок и накопление проектных знаний.</p>
+      </div>
+      <div class="column">
+        <div class="icon">${iconGenerate('0000000111001110000011100')}</div>
+        <h2>Комплексность</h2>
+        <p>Все необходимое сразу из коробки. Постоянное пополнение новыми продуктами, обеспечение актуальности для существующих.</p>
       </div>
     </div>
-    <div class="info container fx">
-      <div>
-        <h2>For whom?</h2>
-        <div class="bl">
-          <h4>simple single page websites</h4>
-          <p>the core weighs very little</p>
+    <div class="footer container fx">
+        <div>
+          <h2>Отличный вариант для крупного проекта</h2>
+          <p>Минимальное накопление проектных знаний</p>
         </div>
-        <div class="bl">
-          <h4>medium projects</h4>
-          <p>all the necessary functionality.</p>
-        </div>
-        <div class="bl">
-          <h4>large projects</h4>
-          <p>great flexibility and can be tailored to the needs of a particular business.</p>
-        </div>
-      </div>
-      <div class="image"
-
-      </div>
-    </div>`,
+        <div>fff</div>
+    </div>`
+  },
   layout: common,
   nodes() {
     return {
+      'main-logo': {
+        src:  logo// return new URL('./leste-logo-mini.png', import.meta.url) as any as string
+      },
       first: {
         component: {
           src: btn,

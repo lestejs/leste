@@ -7,8 +7,11 @@
   border-radius: 2px;
   padding:  var(--s);
   transform: translate3d(0, 0, 0);
-  border: 1px solid var(--gray300);
+  border: 2px solid var(--dark);
   box-shadow: 0 3px 5px #00000014;
+  .l-window {
+    transition: transform 2s cubic-bezier(0.24, 0.22, 0.015, 1.56) 0s, opacity 1s ease-in-out 0s;
+  }
 }
 .l-dropdown.hide {
   display: none;

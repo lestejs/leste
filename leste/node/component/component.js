@@ -1,4 +1,5 @@
 import release from '../../utils/release'
+import mount from '../../index'
 
 class Component {
   constructor(component, context, keyNode, nodeElement, common) {
@@ -47,7 +48,7 @@ class Component {
       if (proxies) this.props.proxies = proxies
       if (src) {
         const component = await this.load(src)
-        await this.common.mount(this.nodeElement, component, {...this.props}, index !== undefined)
+        await mount(this.nodeElement, component, this.props, index !== undefined)
       }
     } catch (e) {
       console.error(e)

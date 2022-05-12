@@ -1,8 +1,8 @@
-import Leste from '~/leste'
+import mount from '~/leste'
 
 export default class Router {
   constructor(routes, root) {
-    this.current = {}
+    this.current = { options: {}, context: {}, path: '' }
     this.routes = routes
     this.root = root
     this.from = {}
@@ -10,6 +10,7 @@ export default class Router {
     this.links()
     this.addListener()
     this.update()
+    this.layout = false
   }
   setName(name) {
     this.root.setAttribute('name', name)
@@ -47,23 +48,24 @@ export default class Router {
         const reg = new RegExp('^' + route.path.replace(/:\w+/g, '(\\w+)') + '$')
         const parts = path.match(reg)
         if (parts) {
-          this.from = { ...this.to }
-          this.to = this.params(slugs, parts)
-          if (this.current?.cache && (route.path === this.current.cache.path)) {
-            this.current.props.routeUpdate(this.from, this.to)
+          this.current.options.leave && this.current.options.leave.bind(this.current.context)(this.from, this.to)
+          if (this.current.path === route.path) {
+            this.current.options.route && this.current.options.route.bind(this.current.context)(this.from, this.to)
           } else {
             document.title = route.title || 'Leste'
             this.setName(route.name)
-            this.current?.cache && this.current.props.unmount()
-            if (!route.cache) {
-              const src = await route.component()
-              route.cache = src.default
-              route.cache.path = route.path
-              route.props = {navigate: {push: this.push, ...this.to }}
+            const file = await route.component()
+            const component = file.default
+            this.current.path = route.path
+            if (component.layout && !this.layout) {
+              await mount(this.root, component.layout)
+              this.layout = true
             }
-            const leste = new Leste(this.root)
-            await leste.mount(this.root, route.cache, route.props)
-            this.current = route
+            this.current = await mount(this.root, component)
+            this.from = { ...this.to }
+            this.to = this.params(slugs, parts)
+            this.current.context.router = { push: this.push.bind(this), ...this.to }
+            this.current.options.loaded && this.current.options.loaded.bind(this.current.context)(this.from, this.to)
           }
           break
         }

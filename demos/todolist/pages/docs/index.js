@@ -17,6 +17,10 @@ export default {
     </div>`
   },
   layout: common,
+  params: {
+    headers: null,
+    test: [0]
+  },
   proxies: {
     index: null
   },
@@ -42,7 +46,26 @@ export default {
       content: {}
     }
   },
+  methods: {
+    check() {
+      for (let index = 0;index < this.param.headers.length;index++) {
+        const header = this.param.headers[index]
+        if (header.tagName === "H2" || header.tagName === "H3") {
+          const rect = header.getBoundingClientRect()
+          if (rect.top > 0 || rect.bottom > 0) {
+            this.proxy.index = index
+            break
+          }
+        }
+      }
+    }
+  },
+  leave() {
+    this.node.root.removeEventListener('scroll', this.method.check)
+  },
   mounted() {
+    this.param.test.push(0)
+    console.log(this.param.test)
     marked.setOptions({
       renderer: new marked.Renderer(),
       highlight: function(code, lang) {
@@ -59,35 +82,23 @@ export default {
       xhtml: false
     })
     this.node.content.innerHTML = marked.parse(api, 'js') // marked.parse(api, 'javascript')
-    const headers = this.node.content.querySelectorAll('h1,h2,h3')
-    const check = () => {
-      for (let index = 0;index < headers.length;index++) {
-        const header = headers[index]
-        if (header.tagName === "H2" || header.tagName === "H3") {
-          const rect = header.getBoundingClientRect()
-          if (rect.top > 0 || rect.bottom > 0) {
-            this.proxy.index = index
-            break
-          }
-        }
-      }
-    }
-    this.node.root.addEventListener('scroll', check)
+    this.param.headers = this.node.content.querySelectorAll('h1,h2,h3')
+    this.node.root.addEventListener('scroll', this.method.check)
     this.node.sidebar.integrate({
       src: navigation,
       params: {
-        headers
+        headers: this.param.headers
       },
       proxies: {
-        index: () => this.proxy.index
+        index: () => this.proxy.index || 0
       },
       methods: {
         active: (index) => {
           this.proxy.index = index
-          this.node.root.removeEventListener('scroll', check)
-          this.delay(() => this.node.root.addEventListener('scroll', check), 1000)
+          this.node.root.removeEventListener('scroll', this.method.check)
+          this.delay(() => this.node.root.addEventListener('scroll', this.method.check), 1000)
           this.node.root.scrollTo({
-            top: headers[index].offsetTop,
+            top: this.param.headers[index].offsetTop,
             behavior: 'smooth'
           })
         }

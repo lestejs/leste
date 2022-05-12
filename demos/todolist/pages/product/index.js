@@ -25,10 +25,8 @@ export default {
   },
   routeUpdate(from, to) {
     console.log(from, to)
-    debugger
     // this.navigate.push('/dhdfdfhdfhdf')
   },
   mounted() {
-    console.log(this.node.map.cmp(0).method.cell(1, 2))
   }
 }

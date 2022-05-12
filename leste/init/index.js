@@ -1,21 +1,21 @@
 import { dipprox } from '../utils/dipprox'
 import { delay } from '../utils/delay'
 import release from '../utils/release'
+import errors from '../errors'
 import Node from '../node'
 
 class Init {
-  constructor(component, mount, root, errors) {
+  constructor(component) {
     this.component = component
     if (!this.component.proxies) this.component.proxies = {}
     this.common = {
       refs: [],
-      mount,
       errors
     },
-    this.storesListners = {}
+    this.storesHadlers = {}
     this.context = {
       options: component,
-      node: { root },
+      node: { root: document.querySelector('#root') },
       param: {},
       reactiveMap: {},
       method: {},
@@ -36,8 +36,10 @@ class Init {
     this.component.mounted && await this.component.mounted.bind(this.context)()
   }
   async unmounted() {
-    for (let store of Object.values(this.component.stores)) {
-      document.addEventListener(store.name)
+    if (this.component.stores) {
+      for (let store of Object.values(this.component.stores)) {
+        document.addEventListener(store.name, this.storesHadlers[store.name])
+      }
     }
     this.component.unmounted && await this.component.unmounted.bind(this.context)()
   }
@@ -80,6 +82,7 @@ class Init {
             }
           }
         }
+        Object.assign(this.storesHadlers, {[name]: handler})
         document.addEventListener(name, handler, false)
       }
     }
@@ -122,7 +125,6 @@ class Init {
         for (const key in this.component.props.proxies) {
           if (key in props.proxies) {
             this.component.proxies[key] = props.proxies[key]
-            console.log(container, key)
             Object.defineProperty(container.proxy, key, {
               set(value) {
                 context.proxy[key] = release(value)

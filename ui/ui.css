@@ -4,15 +4,15 @@
     --ss: 2vw;
     --sm: 4vw;
     --vs: 5vmin;
-    --vm: 8vmin;
-    --vl: 15vmin;
+    --vm: 10vmin;
+    --vl: 13vmin;
     --top-space: 8vmin;
     --max-width: 1330px;
     --fs-xxs: 14px;
     --fs-xs: 16px;
-    --fs-s: 1.1rem;
+    --fs-s: 1rem;
     --fs-m: 2.6rem;
-    --fs-l: 3rem;
+    --fs-l: 4rem;
     --fs-xl: 5rem;
     --xxs: .55rem;
     --xs: 1.4rem;
@@ -27,7 +27,7 @@
     --gray: #f7f7f7;
     --gray100: #e8e8e8;
     --gray200: #dbdbdb;
-    --gray300: #a5a5a5;
+    --gray300: #a6a6a6;
     --gray400: #777;
     --gray500: #3a3a3a;
     --gray900: #151515;
@@ -51,6 +51,7 @@ body {
     font-family: 'Nunito Sans', sans-serif;
     overflow-x: hidden;
     color: var(--gray500);
+    font-size: var(--fs-xs);
 }
 a {
     text-decoration: none;
@@ -70,8 +71,9 @@ h1, h2, h3 {
     display: none;
 }
 
-cmp {
-    display: contents;
+p {
+    max-width: 72ch;
+    margin-bottom: 1em;
 }
 
 .br {

@@ -17,12 +17,11 @@ header {
   align-items: center;
   font-size: var(--fs-xs);
   background-color: white;
-  /* box-shadow: 0 2px 5px #00000014; */
-  border-bottom: 1px solid var(--light-gray);
   color: var(--gray900);
   z-index: 10;
+  transition: padding .5s;
   .logo {
-    height: 1.8em;
+    height: 2.2em;
     margin-right: var(--m);
   }
   .l-button .label {
@@ -74,10 +73,13 @@ header {
 [name='guide'] .sideNav {
   display: block;
 }
+[name='guide'] header {
+  border-bottom: 1px solid var(--light-gray);
+}
 .open .sideNav{
   display: none;
 }
-.dropdown .l-window {
+.menu-dropdown .l-window {
   columns: 4 var(--xl);
   column-gap: var(--m);
   h3 {
@@ -88,7 +90,23 @@ header {
   div {
     page-break-inside: avoid;
     break-inside: avoid;
-    margin-bottom: var(--m);
+    margin-bottom: var(--s);
+  }
+}
+.menu-dropdown .l-dropdown {
+  padding-bottom: var(--xxs);
+}
+.lang-dropdown .l-window {
+  columns: 3 var(--l);
+  column-gap: var(--m);
+  h3 {
+    color: var(--gray900);
+    font-weight: 600;
+    margin-bottom: 0.8em;
+  }
+  div {
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 }
 @media only screen and (max-width: 1440px) {

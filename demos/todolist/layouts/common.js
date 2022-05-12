@@ -12,9 +12,12 @@ export default {
       <nav class="nav"></nav>
       <div class="wr-menu">
         <div class="menuNav"></div>
-        <div class="dropdown"></div>
+        <div class="menu-dropdown"></div>
       </div>
-      <div class="lang"></div>
+      <div class="wr-lang">
+        <div class="lang"></div>
+        <div class="lang-dropdown"></div>
+      </div>
     </header>
     <div class="wrapper"></div>
     <footer></footer>`,
@@ -33,9 +36,9 @@ export default {
         src: logo // return new URL('./leste-logo-mini.png', import.meta.url) as any as string
       },
       nav: {
-        innerHTML: menu.reduce((html, a) => a.nav ? html + `<a href="${a.url}">${a.name}</a>` : html, '')
+        innerHTML: menu.reduce((html, a) => a.nav ? html + `<a href="${a.url}" link>${a.name}</a>` : html, '')
       },
-      dropdown: {
+      'menu-dropdown': {
         component: {
           src: dropdown,
           proxies: {
@@ -47,6 +50,23 @@ export default {
             <div>
             <h3><a href="${a.url}">${a.name}</a></h3>
             <span>${a.desc}</span>
+            </div>
+            `, '')
+          }
+        }
+      },
+      'lang-dropdown': {
+        component: {
+          src: dropdown,
+          proxies: {
+            toggle: true,
+          },
+          params: {
+            triggerSelector: '.wr-lang',
+            content: ['English', 'Русский', 'Français'].reduce((html, ln) => html + `
+            <div>
+            <h3>${ln}</h3>
+            <span><a>Contribute</a></span>
             </div>
             `, '')
           }
@@ -73,10 +93,7 @@ export default {
           },
           methods: {
             action: () => {
-              // const y = this.node.menuNav.getBoundingClientRect().bottom
-              // const x = document.body.clientWidth - this.node.menuNav.getBoundingClientRect().right
-              // this.node.dropdown.power('cord', { x, y })
-              this.node.dropdown.proxy.toggle = true
+              this.node['menu-dropdown'].proxy.toggle = true
             }
           }
         }
@@ -88,11 +105,11 @@ export default {
             icon: iconGenerate('0100011111001010011100101')
           },
           proxies: {
-            label: 'English'
+            label: 'Languages'
           },
           methods: {
             action: () => {
-              // this.node.root.classList.add('open')
+              this.node['lang-dropdown'].proxy.toggle = true
             }
           }
         }

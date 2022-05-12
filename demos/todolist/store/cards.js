@@ -1,4 +1,4 @@
-import Store from '~/leste/store'
+import Store from '~/store'
 import localforage from 'localforage'
 
 function generateId() {

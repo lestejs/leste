@@ -4,7 +4,7 @@ export default {
       <div class="elements"></div>`
   },
   params: {
-    index: null,
+    index: 0,
     nav: []
   },
   props: {

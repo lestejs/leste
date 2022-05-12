@@ -16,7 +16,7 @@ export default [
   },
   {
     path: 'home',
-    name: '',
+    name: 'home',
     component: () => import('../pages/home')
   },
   {

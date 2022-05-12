@@ -6,5 +6,5 @@ const root = document.querySelector('#root')
 // mount(root, component)
 // or
 import routes from  '~/demos/todolist/routes'
-import Router from '~/leste/router'
+import Router from '~/router'
 new Router(routes, root)

@@ -152,6 +152,6 @@ export default {
   },
   mounted() {
     this.method.set()
-    this.node.root.classList.remove('open')
+    document.body.classList.remove('open')
   }
 }

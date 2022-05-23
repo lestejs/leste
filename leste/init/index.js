@@ -7,7 +7,8 @@ import Node from '../node'
 class Init {
   constructor(component) {
     this.component = component
-    if (!this.component.proxies) this.component.proxies = {}
+    this.paramsData = {}
+    this.proxiesData = this.component.proxies ? release(this.component.proxies) : {}
     this.common = {
       refs: [],
       errors
@@ -15,7 +16,7 @@ class Init {
     this.storesHadlers = {}
     this.context = {
       options: component,
-      node: { root: document.querySelector('#root') },
+      node: {},
       param: {},
       reactiveMap: {},
       method: {},
@@ -112,8 +113,9 @@ class Init {
   }
   params() {
     if (this.component.params) {
-      for (const key in this.component.params) {
-        this.context.param[key] = this.component.params[key]
+      this.paramsData = release(this.component.params)
+      for (const key in this.paramsData) {
+        this.context.param[key] = this.paramsData[key]
       }
     }
   }
@@ -124,13 +126,13 @@ class Init {
       if (props.proxies && this.component.props.proxies) {
         for (const key in this.component.props.proxies) {
           if (key in props.proxies) {
-            this.component.proxies[key] = props.proxies[key]
+            this.proxiesData[key] = props.proxies[key]
             Object.defineProperty(container.proxy, key, {
               set(value) {
                 context.proxy[key] = release(value)
               }
             })
-          } else this.component.proxies[key] = undefined
+          } else this.proxiesData[key] = undefined
         }
       }
       if (props.methods && this.component.props.methods) {
@@ -153,9 +155,9 @@ class Init {
   validation() {
     if (this.component.props.proxies) {
       for (const [key, pr] of Object.entries(this.component.props.proxies)) {
-        if (this.component.proxies[key]=== undefined || this.component.proxies[key]===null) this.component.proxies[key] = pr.default
+        if (this.proxiesData[key]=== undefined || this.proxiesData[key]===null) this.proxiesData[key] = pr.default
         if (this.component.props.proxies[key].type) {
-          if (!typeof this.component.proxies[key] === this.component.props.proxies[key].type) {
+          if (!typeof this.proxiesData[key] === this.component.props.proxies[key].type) {
             console.error('Error props type')
           }
         }
@@ -186,7 +188,7 @@ class Init {
   }
   proxies() {
     const self = this
-    this.context.proxy = dipprox(release(this.component.proxies), {
+    this.context.proxy = dipprox(release(this.proxiesData), {
       beforeSet(target, path, value, ref) {
         return self.context.setter[ref]?.bind(self.context)(value)
       },

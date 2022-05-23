@@ -48,7 +48,7 @@ class Component {
       if (proxies) this.props.proxies = proxies
       if (src) {
         const component = await this.load(src)
-        await mount(this.nodeElement, component, this.props, index !== undefined)
+        await mount(this.nodeElement, component, this.props)
       }
     } catch (e) {
       console.error(e)

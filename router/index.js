@@ -1,8 +1,7 @@
-import mount from '~/leste'
-
 export default class Router {
-  constructor(routes, root) {
+  constructor(routes, root, mount) {
     this.current = { options: {}, context: {}, path: '' }
+    this.mount = mount
     this.routes = routes
     this.root = root
     this.from = {}
@@ -58,10 +57,10 @@ export default class Router {
             const component = file.default
             this.current.path = route.path
             if (component.layout && !this.layout) {
-              await mount(this.root, component.layout)
+              await this.mount(this.root, component.layout)
               this.layout = true
             }
-            this.current = await mount(this.root, component)
+            this.current = await this.mount(this.root, component)
             this.from = { ...this.to }
             this.to = this.params(slugs, parts)
             this.current.context.router = { push: this.push.bind(this), ...this.to }

@@ -1,6 +1,5 @@
 import './index.pcss'
 import btn from '~/ui/button'
-import { iconGenerate } from '~/ui/icon'
 
 export default {
   template: `
@@ -31,7 +30,7 @@ export default {
   },
   handlers:{
     open(v) {
-      v ? this.node.root.classList.add('open') : this.node.root.classList.remove('open')
+      v ? document.body.classList.add('open') : document.body.classList.remove('open')
     }
   },
   nodes() {
@@ -73,8 +72,8 @@ export default {
     }
   },
   mounted() {
-    this.param.width && this.node.root.style.setProperty('--sidebar-width', this.param.width)
-    this.param.top && this.node.root.style.setProperty('--sidebar-width', this.param.top)
+    this.param.width && document.body.style.setProperty('--sidebar-width', this.param.width)
+    this.param.top && document.body.style.setProperty('--sidebar-width', this.param.top)
     this.handler.open(this.proxy.open)
   }
 }

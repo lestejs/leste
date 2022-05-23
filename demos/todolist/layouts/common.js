@@ -7,7 +7,7 @@ import menu from './menu.js'
 export default {
   template: `
     <header class="header">
-      <img src="" class="logo">
+      <a href="/" link><img src="" class="logo"></a>
       <div class="sideNav"></div>
       <nav class="nav"></nav>
       <div class="wr-menu">
@@ -21,14 +21,6 @@ export default {
     </header>
     <div class="wrapper"></div>
     <footer></footer>`,
-  setters: {
-  },
-  params: {
-  },
-  proxies: {
-  },
-  sources: {
-  },
   nodes() {
     return {
       header: {},
@@ -80,7 +72,7 @@ export default {
           },
           methods: {
             action: () => {
-              this.node.root.classList.add('open')
+              document.body.classList.add('open')
             }
           }
         }

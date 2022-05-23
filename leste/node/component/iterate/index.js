@@ -28,6 +28,7 @@ export default async function iterate() {
     }
     this.refs.length = 0
     let data = this.node.component.data
+    this.nodeElement.setAttribute('iterate', '')
     const component = new this.Component(this.node.component, this.context, this.keyNode, this.nodeElement, this.common)
     if (typeof data === 'number') {
       // dfhdfhdf

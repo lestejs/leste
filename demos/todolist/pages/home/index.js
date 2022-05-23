@@ -1,17 +1,22 @@
 import './index.pcss'
-import logo from 'url:./leste-mini.svg'
 import common from '../../layouts/common'
 import btn from '~/ui/button'
 import { iconGenerate } from '~/ui/icon'
+import CodeMirror from 'codemirror'
+import './codemirror.css'
+import 'codemirror/mode/javascript/javascript.js'
+import srcdoc from 'bundle-text:./iframe.html'
+import mount from '~/leste'
+import tunerEx from 'bundle-text:../../examples/tuner/index.txt'
+import tesla from 'url:./sponsors/Tesla-Logo-PNG-Images-HD.png'
 
 export default {
   fragments: {
     wrapper: `
     <div class="main container">
-      <img src="" class="main-logo">
       <h2>Light & Simple</h2>
       <h1>Javascript Framework</h1>
-      <h3>Leste это комплеес решений, написаный на чистом js. Libraries change, javascript is eternal!</h3>
+      <h3>Libraries change, javascript is eternal!</h3>
       <div class="buttons fx">
         <div class="first dark-btn"></div>
         <div class="second dark-btn"></div>
@@ -33,26 +38,37 @@ export default {
         <h2>Надежность</h2>
         <p>Строгие принципы фреймворка позволяют минимизировать количество ошибок и накопление проектных знаний.</p>
       </div>
-      <div class="column">
-        <div class="icon">${iconGenerate('0000000111001110000011100')}</div>
-        <h2>Комплексность</h2>
-        <p>Все необходимое сразу из коробки. Постоянное пополнение новыми продуктами, обеспечение актуальности для существующих.</p>
+    </div>
+    <div class="examples container fx">
+      <div class="desc">
+      <h2>Принцип реактивности</h2>
+      <p><a href="">Реактивные</a> данные задаются в <span>proxies</span>, в коде доступны как <span>this.proxy</span>.</p>
+      <p>Для любых нативных JavaScript свойств, описанных в объектах <span>nodes()</span>, например как <a href="https://developer.mozilla.org/ru/docs/Web/API/Node/textContent">textContent</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/disabled">disabled</a> могут быть установлены функции.</p>
+      <p>При изменение <span>this.proxy</span>, результат выполнения таких функций изменяет соответствующие свойство.</p>
+      <p><a class="more" href="/examples" link>Больше примеров</a></p>
+      </div>
+      <div class="example fx">
+        <div class="codeMenu"></div>
+        <iframe class="iframe" srcdoc sandbox="allow-forms allow-modals allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation" frameborder="0"></iframe>
       </div>
     </div>
-    <div class="footer container fx">
-        <div>
-          <h2>Отличный вариант для крупного проекта</h2>
-          <p>Минимальное накопление проектных знаний</p>
+    
+    <div class="footer container">
+        <h2>Спонсоры</h2>
+        <div class="titles">
+          <a href="https://www.tesla.com/" class="title">
+            <img src="${tesla}" alt="tesla">
+          </a>
+          <a class="title">Your logo</a>
+          <a class="title">Your logo</a>
+          <a class="title">Your logo</a>
         </div>
-        <div>fff</div>
-    </div>`
+    </div>
+    <div class="license">Leste © ${new Date().getFullYear()} Released under the <a href="#">MIT License.</a></div>`
   },
   layout: common,
   nodes() {
     return {
-      'main-logo': {
-        src:  logo// return new URL('./leste-logo-mini.png', import.meta.url) as any as string
-      },
       first: {
         component: {
           src: btn,
@@ -70,9 +86,33 @@ export default {
             icon: iconGenerate('0100101111011111111000110')
           }
         }
+      },
+      codeMenu: {},
+      iframe: {
+        srcdoc: srcdoc
       }
     }
   },
   mounted() {
+      this.node.iframe.onload = () => {
+        this._editor = CodeMirror(this.node.codeMenu, {
+          lineNumbers: true,
+          lineWrapping: true,
+          indentWithTabs: false,
+          tabSize: 2,
+          value: tunerEx,
+          mode: {
+            name: "javascript",
+            json: true,
+            statementIndent: 2
+          }
+        })
+        this.node.iframe.contentWindow.mount = mount
+        this.node.iframe.contentWindow.eval(this._editor.getValue())
+        this._editor.on('changes', () => {
+          this.node.iframe.contentWindow.document.body.innerHTML = '<div id="root"></div>'
+          this.node.iframe.contentWindow.eval(this._editor.getValue())
+        })
+      }
   }
 }

@@ -17,9 +17,9 @@ export default {
     </div>`
   },
   layout: common,
-  params: {
-    headers: null,
-    test: [0]
+  params:{
+      headers: null,
+      test: [0]
   },
   proxies: {
     index: null
@@ -28,7 +28,7 @@ export default {
     return {
       sidebar: {
         component: {
-          type: 'integrate',
+          // type: 'integrate',
           src: sidebar,
           params: {
             close: iconGenerate('0000100010001000001000001'),
@@ -61,7 +61,7 @@ export default {
     }
   },
   leave() {
-    this.node.root.removeEventListener('scroll', this.method.check)
+    $root.removeEventListener('scroll', this.method.check)
   },
   mounted() {
     this.param.test.push(0)
@@ -83,7 +83,7 @@ export default {
     })
     this.node.content.innerHTML = marked.parse(api, 'js') // marked.parse(api, 'javascript')
     this.param.headers = this.node.content.querySelectorAll('h1,h2,h3')
-    this.node.root.addEventListener('scroll', this.method.check)
+    $root.addEventListener('scroll', this.method.check)
     this.node.sidebar.integrate({
       src: navigation,
       params: {
@@ -95,9 +95,9 @@ export default {
       methods: {
         active: (index) => {
           this.proxy.index = index
-          this.node.root.removeEventListener('scroll', this.method.check)
-          this.delay(() => this.node.root.addEventListener('scroll', this.method.check), 1000)
-          this.node.root.scrollTo({
+          $root.removeEventListener('scroll', this.method.check)
+          this.delay(() => $root.addEventListener('scroll', this.method.check), 1000)
+          $root.scrollTo({
             top: this.param.headers[index].offsetTop,
             behavior: 'smooth'
           })

@@ -1,10 +1,9 @@
 import { Init } from './init'
-import clone from './utils/clone'
 
-function contain(entry, nodeElement, iterate) {
+function contain(entry, nodeElement) {
   if (entry.template) {
     nodeElement.insertAdjacentHTML("beforeEnd", entry.template)
-    return iterate ? nodeElement.lastChild : nodeElement
+    return nodeElement.getAttribute('iterate') ? nodeElement.lastChild : nodeElement
   } else if (entry.fragments) {
     for (const [key, fr] of Object.entries(entry.fragments)) {
       const place = nodeElement.querySelector(`.${key}`)
@@ -13,16 +12,15 @@ function contain(entry, nodeElement, iterate) {
     return nodeElement
   }
 }
-async function mount(nodeElement, entry, props = {}, iterate) {
-  if (entry) {
-    const options = clone(entry)
+async function mount(nodeElement, options, props = {}) {
+  if (options) {
     let component = new Init(options)
     await component.created()
     component.stores()
     component.setters()
     component.handlers()
     component.params()
-    const container = contain(options, nodeElement, iterate)
+    const container = contain(options, nodeElement)
     container.unmount = async () => {
       container.remove()
       await component.unmounted()
@@ -35,6 +33,4 @@ async function mount(nodeElement, entry, props = {}, iterate) {
     return { options, context: component.context}
   }
 }
-
-
 export default mount

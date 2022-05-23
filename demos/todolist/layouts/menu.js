@@ -1,47 +1,30 @@
 export default [
   {
-    url: '/docs',
+    url: '/guide',
     name:'Guide',
     desc: 'dfsd fsdg sdgsdgd',
     nav: true
   },
   {
-    url: '/docs',
-    name:'Tutorial',
+    url: '/examples',
+    name:'Examples',
     desc: 'dfsd fsdg sdgsdgd',
     nav: true
   },
   {
-    url: '/docs',
+    url: '/ui',
     name:'UI components',
     desc: 'dfsd fsdg sdgsdgd',
     nav: true
   },
   {
-    url: '/docs',
-    name:'Products',
-    desc: 'dfsd fsdg sdgsdgd',
-    nav: true
-  },
-  {
-    url: '/docs',
-    name:'Education',
-    desc: 'dfsd fsdg sdgsdgd',
-    nav: true
-  },
-  {
-    url: '/docs',
-    name:'Core doc',
+    url: '/documentation',
+    name:'Documentation',
     desc: 'dfsd fsdg sdgsdgd',
   },
   {
-    url: '/docs',
+    url: '/about',
     name:'About',
-    desc: 'dfsd fsdg sdgsdgd'
-  },
-  {
-    url: '/docs',
-    name:'Shop',
     desc: 'dfsd fsdg sdgsdgd'
   }
 ]

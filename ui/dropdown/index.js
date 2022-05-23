@@ -22,7 +22,7 @@ export default {
       this.proxy.hide = !this.proxy.hide
     },
     hide(v) {
-      v ? this.node.root.classList.remove('l-no-scroll') : this.node.root.classList.add('l-no-scroll')
+      v ? document.body.classList.remove('l-no-scroll') : document.body.classList.add('l-no-scroll')
     }
   },
   nodes() {
@@ -40,7 +40,7 @@ export default {
   methods: {
   },
   mounted() {
-    const trigger = this.node.root.querySelector(this.param.triggerSelector)
+    const trigger = document.body.querySelector(this.param.triggerSelector)
     trigger.classList.add('l-relative')
     document.body.addEventListener('click', (event) => {
       if (!event.target.closest('.l-dropdown') && !event.target.closest(this.param.triggerSelector)) this.proxy.hide = true

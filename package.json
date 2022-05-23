@@ -16,9 +16,11 @@
     "autoprefixer": "^10.4.2",
     "parcel": "^2.3.2",
     "precss": "^4.0.0",
+    "process": "^0.11.10",
     "sharp": "^0.29.3"
   },
   "dependencies": {
+    "codemirror": "^5.65.4",
     "highlight.js": "^11.5.1",
     "localforage": "^1.10.0",
     "marked": "^4.0.14"

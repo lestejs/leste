@@ -1,0 +1,27 @@
+const layout = {
+  template: `<nav class="nav"></nav>`,
+  params: () => {
+    return {
+        menu: [
+          { path: '/', name: 'home' },
+          { path: '/about', name: 'about' },
+          { path: '/contacts', name: 'contacts' },
+        ],
+        active: null
+    }
+  },
+  nodes() {
+    return {
+      nav: {
+        onclick: (event) => {
+          event.preventDefault()
+          this.param.active && this.param.active.classList.remove('active')
+          this.param.active = event.target.closest('a')
+          this.param.active.classList.add('active')
+        },
+        innerHTML: this.param.menu.reduce((html, a) => html + `<a href="${a.path}"><span>${a.name}</span></a>`, '')
+      }
+    }
+  }
+}
+mount(document.querySelector("#root"), layout)

@@ -1,18 +1,36 @@
 import { Init } from './init'
 
-function contain(entry, nodeElement) {
-  if (entry.template) {
-    nodeElement.insertAdjacentHTML("beforeEnd", entry.template)
-    return nodeElement.getAttribute('iterate') ? nodeElement.lastChild : nodeElement
-  } else if (entry.fragments) {
-    for (const [key, fr] of Object.entries(entry.fragments)) {
+function contain(options, nodeElement, component) {
+  if (options.template) {
+    nodeElement.insertAdjacentHTML("beforeEnd", options.template)
+    if (nodeElement.hasAttribute('iterate')) {
+      nodeElement.lastChild.unmount = async () => {
+        await component.unmount()
+        nodeElement.children[nodeElement.children.length - 1].remove()
+      }
+      return nodeElement.lastChild
+    } else {
+      nodeElement.unmount = async () => {
+        await component.unmount()
+        nodeElement.innerHTML = ''
+      }
+      return nodeElement
+    }
+  } else if (options.fragments) {
+    for (const [key, fr] of Object.entries(options.fragments)) {
       const place = nodeElement.querySelector(`.${key}`)
-      place.innerHTML = fr
+      if (place.hasAttribute('slot')) {
+        place.unmount = async () => {
+          await component.unmount()
+          place.innerHTML = ''
+        }
+        place.innerHTML = fr
+      }
     }
     return nodeElement
   }
 }
-async function mount(nodeElement, options, props = {}) {
+export async function mount(nodeElement, options, props = {}) {
   if (options) {
     let component = new Init(options)
     await component.created()
@@ -20,11 +38,8 @@ async function mount(nodeElement, options, props = {}) {
     component.setters()
     component.handlers()
     component.params()
-    const container = contain(options, nodeElement)
-    container.unmount = async () => {
-      container.remove()
-      await component.unmounted()
-    }
+    const container = contain(options, nodeElement, component)
+    await component.prepared(container)
     component.props(props, container)
     component.methods(container)
     component.proxies()
@@ -33,4 +48,3 @@ async function mount(nodeElement, options, props = {}) {
     return { options, context: component.context}
   }
 }
-export default mount

@@ -10,7 +10,7 @@ class Iterator {
     length < this.nodeElement.children.length && this.remove(length)
   }
   async set(arr) {
-    this.remove(0)
+    await this.remove(0)
     await this.add(arr.length)
   }
   async add(length) {
@@ -20,11 +20,11 @@ class Iterator {
       qty++
     }
   }
-  remove(length) {
+  async remove(length) {
     let qty = this.nodeElement.children.length
     while (length < qty) {
       qty--
-      this.nodeElement.children[qty].unmount()
+      await this.nodeElement.children[qty].unmount()
     }
   }
 }

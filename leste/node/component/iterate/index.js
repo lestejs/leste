@@ -14,6 +14,7 @@ export default async function iterate() {
             this.nodeElement.reactive(this.refs, 'component', (t, p) => {
               const index = p[1] // убедится в имени массива
               if (index) {
+                console.log(this.nodeElement.children[index], index)
                 this.nodeElement.children[index].proxy[pr] = v(data[index], index)
               } else {
                 for (let index = 0; index < this.nodeElement.children.length; index++) {

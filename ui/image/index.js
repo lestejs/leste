@@ -4,10 +4,8 @@ export default {
         <img class="image">
         <div class="l-preload"></div>
       </div>`,
-  proxies() {
-    return {
-      preload: true
-    }
+  proxies: {
+    preload: true
   },
   props: {
     proxies: {

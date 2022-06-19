@@ -6,7 +6,8 @@
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
     "start": "parcel",
-    "build": "parcel build"
+    "build": "parcel build",
+    "cdn": "node scripts/build.js"
   },
   "author": "",
   "license": "ISC",
@@ -21,8 +22,11 @@
   },
   "dependencies": {
     "codemirror": "^5.65.4",
+    "esbuild": "^0.14.41",
     "highlight.js": "^11.5.1",
     "localforage": "^1.10.0",
-    "marked": "^4.0.14"
-  }
+    "marked": "^4.0.14",
+    "path": "^0.12.7"
+  },
+  "type": "module"
 }

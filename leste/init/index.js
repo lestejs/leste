@@ -1,6 +1,6 @@
 import { dipprox } from '../utils/dipprox'
 import { delay } from '../utils/delay'
-import release from '../utils/release'
+import replicate from '../utils/replicate'
 import errors from '../errors'
 import Node from '../node'
 
@@ -8,13 +8,14 @@ class Init {
   constructor(component) {
     this.component = component
     this.paramsData = {}
-    this.proxiesData = this.component.proxies ? release(this.component.proxies) : {}
+    this.proxiesData = this.component.proxies ? replicate(this.component.proxies) : {}
     this.common = {
       refs: [],
       errors
     },
     this.storesHadlers = {}
     this.context = {
+      container: null,
       options: component,
       node: {},
       param: {},
@@ -24,6 +25,7 @@ class Init {
       setter: {},
       handler: {},
       source: component.sources,
+      router: component.router,
       delay
     }
   }
@@ -33,16 +35,20 @@ class Init {
   async loaded() {
     this.component.loaded && await this.component.loaded.bind(this.context)()
   }
+  async prepared(container) {
+    this.context.container = container
+    this.component.prepared && await this.component.prepared.bind(this.context)()
+  }
   async mounted() {
     this.component.mounted && await this.component.mounted.bind(this.context)()
   }
-  async unmounted() {
+  async unmount() {
     if (this.component.stores) {
       for (let store of Object.values(this.component.stores)) {
         document.addEventListener(store.name, this.storesHadlers[store.name])
       }
     }
-    this.component.unmounted && await this.component.unmounted.bind(this.context)()
+    this.component.unmount && await this.component.unmount.bind(this.context)()
   }
   stores() {
     if (this.component.stores) {
@@ -57,14 +63,14 @@ class Init {
         if (store.proxies) {
           for (const key in store.proxies) {
             if (key in this.component.props.proxies) {
-              this.component.proxies[key] = release(store.proxies[key])
+              this.component.proxies[key] = replicate(store.proxies[key])
             }
           }
         }
         if (store.methods) {
           for (const key in store.methods) {
             if (key in this.component.props.methods) {
-              this.context.method[key] = (...args) => store.methods[key].bind(store)(...release(args))
+              this.context.method[key] = (...args) => store.methods[key].bind(store)(...replicate(args))
             }
           }
         }
@@ -93,7 +99,7 @@ class Init {
     if (this.component.methods) {
       for (const [key, method] of Object.entries(this.component.methods)) {
         this.context.method[key] = method.bind(this.context)
-        container.method[key] = (...args) => this.context.method[key](...release(args))
+        container.method[key] = (...args) => this.context.method[key](...replicate(args))
       }
     }
   }
@@ -113,7 +119,7 @@ class Init {
   }
   params() {
     if (this.component.params) {
-      this.paramsData = release(this.component.params)
+      this.paramsData = replicate(this.component.params)
       for (const key in this.paramsData) {
         this.context.param[key] = this.paramsData[key]
       }
@@ -129,7 +135,7 @@ class Init {
             this.proxiesData[key] = props.proxies[key]
             Object.defineProperty(container.proxy, key, {
               set(value) {
-                context.proxy[key] = release(value)
+                context.proxy[key] = replicate(value)
               }
             })
           } else this.proxiesData[key] = undefined
@@ -145,7 +151,7 @@ class Init {
       if (props.params && this.component.props.params) {
         for (const key in this.component.props.params) {
           if (key in props.params) {
-            this.context.param[key] = release(props.params[key])
+            this.context.param[key] = replicate(props.params[key])
           } else this.context.param[key] = undefined
         }
       }
@@ -188,7 +194,7 @@ class Init {
   }
   proxies() {
     const self = this
-    this.context.proxy = dipprox(release(this.proxiesData), {
+    this.context.proxy = dipprox(replicate(this.proxiesData), {
       beforeSet(target, path, value, ref) {
         return self.context.setter[ref]?.bind(self.context)(value)
       },

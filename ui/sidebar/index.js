@@ -5,9 +5,9 @@ export default {
   template: `
     <div class="l-sidebar w-side">
       <div class="close fx"></div>
-      <div class="group-first shift">
+      <div class="group-first shift" slot>
       </div>
-      <div class="group-second shift">
+      <div class="group-second shift" slot>
       </div>
     </div>`,
   props: {

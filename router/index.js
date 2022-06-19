@@ -11,8 +11,9 @@ export default class Router {
     this.update()
     this.layout = false
   }
-  setName(name) {
-    this.root.setAttribute('name', name)
+  setName(name, layout) {
+    this.root.setAttribute('name', name || '')
+    this.root.setAttribute('layout', layout || '')
   }
   addListener() {
     window.addEventListener('popstate', () => {
@@ -28,12 +29,12 @@ export default class Router {
       }
     }
   }
-  params(slugs, parts) {
+  params(slugs, parts, name) {
     const param = {}
     slugs && slugs.forEach((slug, index) => {
       param[slug.substring(1)] = parts[index + 1]
     })
-    return {path: parts[0], param }
+    return {fullPath: window.location.href, hash: window.location.hash, path: parts[0], param, name }
   }
   push(path) {
     history.pushState(null, null, path)
@@ -47,24 +48,25 @@ export default class Router {
         const reg = new RegExp('^' + route.path.replace(/:\w+/g, '(\\w+)') + '$')
         const parts = path.match(reg)
         if (parts) {
-          this.current.options.leave && this.current.options.leave.bind(this.current.context)(this.from, this.to)
-          if (this.current.path === route.path) {
+          this.from = { ...this.to }
+          this.to = this.params(slugs, parts, route?.name)
+          if (this.from.path === route.path) {
             this.current.options.route && this.current.options.route.bind(this.current.context)(this.from, this.to)
           } else {
+            this.current.options.leave && this.current.options.leave.bind(this.current.context)(this.from, this.to)
             document.title = route.title || 'Leste'
-            this.setName(route.name)
+            this.setName(route.name, route.layout)
             const file = await route.component()
             const component = file.default
             this.current.path = route.path
-            if (component.layout && !this.layout) {
+            if (component.layout && this.layout !== route.name) {
+              this.root.unmount && await this.root.unmount()
+              component.layout.load && await component.layout.load.bind(component.layout)(this.from, this.to)
               await this.mount(this.root, component.layout)
-              this.layout = true
+              this.layout = route.name
             }
+            component.router = { push: this.push.bind(this), ...this.to }
             this.current = await this.mount(this.root, component)
-            this.from = { ...this.to }
-            this.to = this.params(slugs, parts)
-            this.current.context.router = { push: this.push.bind(this), ...this.to }
-            this.current.options.loaded && this.current.options.loaded.bind(this.current.context)(this.from, this.to)
           }
           break
         }

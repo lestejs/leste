@@ -1,5 +1,5 @@
-import release from '../../utils/release'
-import mount from '../../index'
+import replicate from '../../utils/replicate'
+import { mount } from '../../index'
 
 class Component {
   constructor(component, context, keyNode, nodeElement, common) {
@@ -18,7 +18,7 @@ class Component {
     if (methods) {
       for (const [pr, v] of Object.entries(methods)) {
         if (typeof v === 'function') {
-          Object.assign(this.props.methods, { [pr]: (...args) => v.bind(this.context)(...release(args)) })
+          Object.assign(this.props.methods, { [pr]: (...args) => v.bind(this.context)(...replicate(args)) })
         }
       }
     }
@@ -29,7 +29,7 @@ class Component {
       for (const [pr, v] of Object.entries(params)) {
         if (typeof v === 'function' && v.name) {
           Object.assign(this.props.params, { [pr]: v(val, index) })
-        } else Object.assign(this.props.params, { [pr]: v }) // release(v) ||
+        } else Object.assign(this.props.params, { [pr]: v }) // replicate(v) ||
       }
     }
   }

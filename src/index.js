@@ -1,6 +1,5 @@
 import '~/demos/todolist/styles'
-import mount from '~/leste'
-
+import { mount } from '~/leste'
 const root = document.querySelector('#root')
 window.$root = root
 // mount(root, component)

@@ -7,14 +7,15 @@
     --vm: 10vmin;
     --vl: 13vmin;
     --top-space: 8vmin;
-    --max-width: 1330px;
+    --width: 1330px;
+    --max-width: 1824px;
     --fs-xxs: 14px;
     --fs-xs: 16px;
     --fs-s: 1rem;
-    --fs-m: 2.6rem;
-    --fs-l: 4rem;
+    --fs-m: 2.2rem;
+    --fs-l: 2.8rem;
     --fs-xl: 5rem;
-    --xxs: .55rem;
+    --xxs: .6rem;
     --xs: 1.4rem;
     --s: 2.2rem;
     --m: 3rem;
@@ -100,7 +101,17 @@ p {
 }
 .container {
     position: relative;
-    max-width: var(--max-width);
+    max-width: var(--width);
     margin: 0 auto;
     padding: var(--vm) var(--ss);
+}
+.content {
+    font-size: var(--fs-xs);
+    line-height: 1.6;
+    padding: var(--vm) var(--sm);
+}
+.mw {
+    max-width: var(--max-width);
+    margin-left: auto;
+    margin-right: auto;
 }

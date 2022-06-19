@@ -34,17 +34,17 @@ export default {
   },
   mounted() {
     const headers = this.param.headers
+    const has = window.location.hash
     for (let index = 0;index < headers.length;index++) {
-      const nav = document.createElement('div')
+      const nav = document.createElement('a')
       nav.textContent = headers[index].textContent
       nav.classList.add(headers[index].tagName)
+      nav.href = '#' + headers[index].id
+      nav.setAttribute('link', '')
       this.param.nav.push(nav)
       this.node.elements.appendChild(nav)
-      nav.onclick = () => {
-        if (headers[index].tagName === "H2" || headers[index].tagName === "H3") {
-          this.method.active(index)
-        }
-      }
+      if (has === '#' + headers[index].id) this.method.active(index)
+      nav.onclick = () => this.method.active(index)
     }
   }
 }

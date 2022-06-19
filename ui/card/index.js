@@ -6,7 +6,6 @@ export default {
     <a class="l-card" href="/product/1" link>
         <div class="l-card-btn fx">
           <div class="btn-first"></div>
-          <div class="btn-second"></div>
         </div>
         <div class="l-card-image"></div>
         <div class="wr-label">
@@ -25,7 +24,8 @@ export default {
       buttons: {},
     },
     proxies: {
-      card: {}
+      card: {},
+      active: {}
     },
     methods: {
       action: {}
@@ -54,23 +54,11 @@ export default {
           src: btn,
           params: {
             name: this.param.buttons.first.name,
+            label: this.param.buttons.first.label,
             icon: this.param.buttons.first.icon,
           },
-          methods: {
-            action: this.method.actionCard
-          }
-        }
-      },
-      'btn-second': {
-        onclick: (event) => {
-          event.preventDefault()
-          event.stopPropagation()
-        },
-        component: {
-          src: btn,
-          params: {
-            name: this.param.buttons.second.name,
-            icon: this.param.buttons.second.icon,
+          proxies: {
+            active: () => this.proxy.active
           },
           methods: {
             action: this.method.actionCard
@@ -88,9 +76,14 @@ export default {
         textContent: () => this.proxy.card.title,
       },
       desc: {
-        textContent: () => this.proxy.card.desc,
+        textContent: () => this.proxy.card.favorite,
       },
       'l-card-image': {
+        style: () => {
+          if(this.proxy.card.color) return {
+            'background-color': this.proxy.card.color
+          }
+        },
         component: {
           src: image,
           proxies: {

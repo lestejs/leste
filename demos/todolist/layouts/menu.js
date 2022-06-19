@@ -1,30 +1,35 @@
 export default [
   {
-    url: '/guide',
-    name:'Guide',
+    url: '/examples/component',
+    name: 'Examples',
     desc: 'dfsd fsdg sdgsdgd',
     nav: true
   },
   {
-    url: '/examples',
-    name:'Examples',
+    url: '/api/#',
+    name: 'API',
     desc: 'dfsd fsdg sdgsdgd',
     nav: true
   },
   {
-    url: '/ui',
-    name:'UI components',
+    url: '/ui/button',
+    name: 'UI components',
     desc: 'dfsd fsdg sdgsdgd',
     nav: true
   },
   {
     url: '/documentation',
-    name:'Documentation',
+    name: 'Documentation',
     desc: 'dfsd fsdg sdgsdgd',
   },
   {
+    url: '/shop',
+    name:'Shop',
+    desc: 'dfsd fsdg sdgsdgd'
+  },
+  {
     url: '/about',
-    name:'About',
+    name: 'About',
     desc: 'dfsd fsdg sdgsdgd'
   }
 ]

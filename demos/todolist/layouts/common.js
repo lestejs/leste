@@ -3,6 +3,7 @@ import btn from '~/ui/button'
 import dropdown from '~/ui/dropdown'
 import { iconGenerate } from '~/ui/icon'
 import menu from './menu.js'
+import './index.pcss'
 
 export default {
   template: `
@@ -19,7 +20,7 @@ export default {
         <div class="lang-dropdown"></div>
       </div>
     </header>
-    <div class="wrapper"></div>
+    <div class="wrapper" slot></div>
     <footer></footer>`,
   nodes() {
     return {
@@ -40,7 +41,7 @@ export default {
             triggerSelector: '.wr-menu',
             content: menu.reduce((html, a) => html + `
             <div>
-            <h3><a href="${a.url}">${a.name}</a></h3>
+            <h3><a href="${a.url}" link>${a.name}</a></h3>
             <span>${a.desc}</span>
             </div>
             `, '')
@@ -71,7 +72,7 @@ export default {
             icon: iconGenerate('1111100000111110000011111')
           },
           methods: {
-            action: () => {
+            action: function() {
               document.body.classList.add('open')
             }
           }
@@ -84,7 +85,7 @@ export default {
             icon: iconGenerate('0000000000101010000000000')
           },
           methods: {
-            action: () => {
+            action: function() {
               this.node['menu-dropdown'].proxy.toggle = true
             }
           }
@@ -100,16 +101,18 @@ export default {
             label: 'Languages'
           },
           methods: {
-            action: () => {
+            action: function() {
               this.node['lang-dropdown'].proxy.toggle = true
             }
           }
         }
-      }
+      },
+      wrapper: {}
     }
   },
-  methods: {
+  unmount() {
+    this.node.wrapper.unmount && this.node.wrapper.unmount()
   },
-  mounted() {
+  methods: {
   }
 }

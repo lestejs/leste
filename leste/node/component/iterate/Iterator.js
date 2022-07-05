@@ -24,6 +24,12 @@ class Iterator {
     let qty = this.nodeElement.children.length
     while (length < qty) {
       qty--
+      if (this.nodeElement.reactivity.component) {
+        for (const ref in this.nodeElement.reactivity.component) {
+          const parts = ref.split('_')
+          if (parts[1] == qty) this.nodeElement.reactivity.component[ref].length = 0
+        }
+      }
       await this.nodeElement.children[qty].unmount()
     }
   }

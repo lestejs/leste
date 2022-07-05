@@ -12,12 +12,13 @@ class Node {
     this.nodeElement = nodeElement
     this.nodeElement.reactive = (refs, name, active) => {
       if (refs.length) {
-        if (!(this.keyNode in this.context.reactiveMap)) this.context.reactiveMap[this.keyNode] = {}
         refs.forEach(ref => {
-          if (!(name in this.context.reactiveMap[this.keyNode])) this.context.reactiveMap[this.keyNode][name] = {}
-          if (!(ref in this.context.reactiveMap[this.keyNode][name])) { this.context.reactiveMap[this.keyNode][name][ref] = [] }
-          this.context.reactiveMap[this.keyNode][name][ref].push(active)
+          if (!(name in this.nodeElement.reactivity)) this.nodeElement.reactivity[name] = {}
+          if (!(ref in this.nodeElement.reactivity[name])) { this.nodeElement.reactivity[name][ref] = [] }
+          this.nodeElement.reactivity[name][ref].push(active)
         })
+        this.common.fl = false
+        refs.length = 0
       }
     }
   }

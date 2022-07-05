@@ -7,6 +7,7 @@ import './codemirror.css'
 import 'codemirror/mode/javascript/javascript.js'
 import { mount } from '~/leste'
 import tunerEx from 'bundle-text:../../examples/tuner/index.txt'
+import sandbox from '../../components/sandbox'
 import tesla from 'url:./sponsors/Tesla-Logo-PNG-Images-HD.png'
 
 export default {
@@ -44,12 +45,10 @@ export default {
       <p><a href="">Реактивные</a> данные задаются в <span>proxies</span>, в коде доступны как <span>this.proxy</span>.</p>
       <p>Для любых нативных JavaScript свойств, описанных в объектах <span>nodes()</span>, например как <a href="https://developer.mozilla.org/ru/docs/Web/API/Node/textContent">textContent</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/disabled">disabled</a> могут быть установлены функции.</p>
       <p>При изменение <span>this.proxy</span>, результат выполнения таких функций изменяет соответствующие свойство.</p>
-      <p><a class="more" href="/examples/component" link>Больше примеров</a></p>
+      <p><a class="more" href="/examples/01_component" link>Больше примеров</a></p>
       </div>
-      <div class="example fx">
-        <div class="codeMenu"></div>
-        <iframe class="iframe" srcdoc sandbox="allow-forms allow-modals allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation" frameborder="0"></iframe>
-      </div>
+      <div class="test"></div>
+      <div class="example fx"></div>
     </div>
     
     <div class="footer container">
@@ -92,33 +91,14 @@ export default {
           }
         }
       },
-      codeMenu: {},
-      iframe: {}
-    }
-  },
-  mounted() {
-      this.node.iframe.onload = () => {
-        this._editor = CodeMirror(this.node.codeMenu, {
-          lineNumbers: true,
-          lineWrapping: true,
-          indentWithTabs: false,
-          tabSize: 2,
-          value: tunerEx,
-          mode: {
-            name: "javascript",
-            json: true,
-            statementIndent: 2
+      example: {
+        component: {
+          src: sandbox,
+          params: {
+            file: tunerEx
           }
-        })
-        this.node.iframe.contentWindow.mount = mount
-        this.method.updFrame()
-        this._editor.on('changes', () => this.method.updFrame())
+        }
       }
-  },
-  methods: {
-    updFrame() {
-      this.node.iframe.contentWindow.document.body.innerHTML = '<div id="root"></div>'
-      this.node.iframe.contentWindow.eval(this._editor.getValue())
     }
   }
 }

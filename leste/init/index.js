@@ -10,6 +10,7 @@ class Init {
     this.paramsData = {}
     this.proxiesData = this.component.proxies ? replicate(this.component.proxies) : {}
     this.common = {
+      fl: false,
       refs: [],
       errors
     },
@@ -29,25 +30,22 @@ class Init {
       delay
     }
   }
-  async created() {
-    this.component.created && await this.component.created.bind(this.context)()
-  }
-  async loaded() {
-    this.component.loaded && await this.component.loaded.bind(this.context)()
-  }
-  async prepared(container) {
+  async created(container) {
     this.context.container = container
-    this.component.prepared && await this.component.prepared.bind(this.context)()
+    this.component.created && await this.component.created.bind(this.context)()
   }
   async mounted() {
     this.component.mounted && await this.component.mounted.bind(this.context)()
   }
-  async unmount() {
+  async unmount(container) {
     if (this.component.stores) {
       for (let store of Object.values(this.component.stores)) {
         document.addEventListener(store.name, this.storesHadlers[store.name])
       }
     }
+    if (container.reactivity) container.reactivity.component = {}
+    container.proxy = {}
+    container.method = {}
     this.component.unmount && await this.component.unmount.bind(this.context)()
   }
   stores() {
@@ -136,9 +134,12 @@ class Init {
             Object.defineProperty(container.proxy, key, {
               set(value) {
                 context.proxy[key] = replicate(value)
+              },
+              get() {
+                return context.proxy[key]
               }
             })
-          } else this.proxiesData[key] = undefined
+          } else this.proxiesData[key] = null
         }
       }
       if (props.methods && this.component.props.methods) {
@@ -152,7 +153,7 @@ class Init {
         for (const key in this.component.props.params) {
           if (key in props.params) {
             this.context.param[key] = replicate(props.params[key])
-          } else this.context.param[key] = undefined
+          } else this.context.param[key] = null
         }
       }
       this.validation()
@@ -196,17 +197,17 @@ class Init {
     const self = this
     this.context.proxy = dipprox(replicate(this.proxiesData), {
       beforeSet(target, path, value, ref) {
-        return self.context.setter[ref]?.bind(self.context)(value)
+        if (!self.context.setter[ref]) return value
+        return self.context.setter[ref].bind(self.context)(value)
       },
       async set(target, path, value, ref) {
-        if (self.context.reactiveMap) {
-          for (const keyNode in self.context.reactiveMap) {
-            for (const name in self.context.reactiveMap[keyNode]) {
-              const actives = self.context.reactiveMap[keyNode][name][ref]
-              if (actives?.length) {
-                for (const active of actives) {
-                  await active(target, path, value)
-                }
+        for (const keyNode in self.context.node) {
+          const nodeElement = self.context.node[keyNode]
+          for (const name in nodeElement.reactivity) {
+            const actives = nodeElement.reactivity[name][ref]
+            if (actives?.length) {
+              for (const active of actives) {
+                await active(target, path, value)
               }
             }
           }
@@ -214,7 +215,9 @@ class Init {
         return self.context.handler[ref]?.bind(self.context)(value)
       },
       get(target, path) {
+        if (!self.common.fl) self.common.refs.length = 0
         self.common.refs.push(path.join('_'))
+        // console.log(self.common.refs)
       },
       deleteProperty(target, path) {
         console.log('delete', path.join('_'))
@@ -226,6 +229,7 @@ class Init {
       const nodes = this.component.nodes.bind(this.context)()
       for await (const [keyNode, options] of Object.entries(nodes)) {
         const nodeElement = container.querySelector(`.${keyNode}`) || container.classList.contains(keyNode) && container
+        nodeElement.reactivity = {}
         Object.assign(this.context.node, { [keyNode]: nodeElement })
         if (options) {
           const node = new Node(options, keyNode, this.context, nodeElement, this.common)

@@ -2,11 +2,13 @@
   "name": "leste",
   "version": "1.0.0",
   "description": "",
-  "source": "src/index.html",
+  "source": "",
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
-    "start": "parcel",
+    "start": "parcel src/index.html",
+    "test": "parcel examples/index.html",
     "build": "parcel build",
+    "bundler": "node scripts/build.js leste",
     "cdn": "node scripts/build.js"
   },
   "author": "",

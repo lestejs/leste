@@ -37,6 +37,7 @@ export default {
           }
         },
         onclick: () => {
+          console.log(this.proxy.active)
           this.method.action(this.param.name)
         }
       },

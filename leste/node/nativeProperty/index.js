@@ -26,6 +26,7 @@ function general(key, value) {
       } else this.nodeElement[key] = val
     }
     this.refs.length = 0
+    this.common.fl = true
     active()
     this.nodeElement.reactive(this.refs, key, active)
   } else this.nodeElement[key] = value

@@ -1,15 +1,17 @@
 export default async function induce() {
   this.refs.length = 0
-  const precept = this.node.component.precept()
-  this.nodeElement.reactive(this.refs, 'precept', async() => {
-    if (this.node.component.precept()) {
+  this.common.fl = true
+  const induce = this.node.component.induce()
+  this.nodeElement.reactive(this.refs, 'induce', async() => {
+    if (this.node.component.induce()) {
+      this.nodeElement.unmount && this.nodeElement.unmount()
       const { component, proxies } = this.simple()
       await component.create(this.node.component.src, proxies)
     } else {
-      this.nodeElement.unmount()
+      this.nodeElement.unmount && this.nodeElement.unmount()
     }
   })
-  if (precept) {
+  if (induce) {
     const { component, proxies } = this.simple()
     await component.create(this.node.component.src, proxies)
   }

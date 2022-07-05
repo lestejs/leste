@@ -10,9 +10,6 @@ class Component {
     this.nodeElement = nodeElement
     this.props = { methods: {}, proxies: {}, params: {}}
   }
-  get options() {
-    return this.component
-  }
   propsMethods() {
     const methods = this.component.methods
     if (methods) {

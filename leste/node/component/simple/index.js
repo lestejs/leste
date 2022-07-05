@@ -6,6 +6,7 @@ export default function simple(options) {
     for (const [pr, v] of Object.entries(props)) {
       if (typeof v === 'function' && v.name) {
         this.refs.length = 0
+        this.common.fl = true
         Object.assign(proxies, { [pr]: v() })
         this.nodeElement.reactive(this.refs, 'component', () => {
           const value = v()

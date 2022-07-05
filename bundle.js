@@ -3,7 +3,7 @@ let bundler = new Parcel({
     ...defaultConfigContents,
     filePath: require.resolve("@parcel/config-default"),
   },
-  entries: "src/target.js",
+  entries: "./leste/index.js",
   isLibrary: true,
   mode: "production",
   outputFormat: "esmodule",
@@ -11,6 +11,5 @@ let bundler = new Parcel({
     outputFormat: "esmodule",
     distDir: "./bundlers",
   },
-});
-
-await bundler.run();
+})
+await bundler.run()

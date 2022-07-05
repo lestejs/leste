@@ -41,7 +41,7 @@ const component = {
       list: {
         component: {
           src: li,
-          data: this.proxy.list,
+          iterate: this.proxy.list,
           params: {
             index: (el, index) => index
           },

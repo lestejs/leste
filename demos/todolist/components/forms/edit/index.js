@@ -84,8 +84,7 @@ export default {
       elements: {
         component: {
           src: btn,
-          type: 'iterate',
-          data: this.param.elements[this.param.type],
+          iterate: this.param.elements[this.param.type],
           params: {
             label: (el) => el.label,
             name: (el, index) => index

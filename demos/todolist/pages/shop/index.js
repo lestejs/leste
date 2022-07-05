@@ -17,7 +17,7 @@ export default {
   },
   layout: common,
   params: {
-    recipes: []
+    recipes: [],
   },
   proxies: {
     isFilter: '',
@@ -56,7 +56,7 @@ export default {
       filters: {
         component: {
           src: btn,
-          data: [{
+          iterate: [{
             name: 'favorites',
             label: 'favorites'
           },{
@@ -83,7 +83,7 @@ export default {
       },
       'l-cards': {
         component: {
-          data: this.proxy.cards,
+          iterate: this.proxy.cards,
           src: card,
           params: {
             buttons: {
@@ -95,9 +95,7 @@ export default {
               }
           },
           proxies: {
-            card: (element) => {
-              return element
-            },
+            card: (element) => element,
             active: (element) => element.favorite
           },
           methods: {
@@ -106,7 +104,7 @@ export default {
               if (index !== -1) {
                 card.favorite = !card.favorite
                 this.proxy.cards[index] = card
-                this.proxy.replica[index] = card
+                this.param.replica[index] = card
               }
             }
           }
@@ -116,21 +114,19 @@ export default {
   },
   mounted() {
     this.param.replica = replicate(this.proxy.cards)
-    console.log(this.reactiveMap)
   },
   methods: {
     action(name) {
       if (this.proxy.isFilter === name) {
         this.proxy.isFilter = ''
         this.proxy.cards = this.param.replica
-        console.log(this.reactiveMap)
       } else {
         this.proxy.isFilter = name
-        // if (name === 'favorites') {
-        //   this.proxy.cards = this.proxy.replica.filter(el => el.favorite)
-        // } else {
-        //   this.proxy.cards = this.proxy.replica.filter(el => el.category === name)
-        // }
+        if (name === 'favorites') {
+          this.proxy.cards = this.param.replica.filter(el => el.favorite)
+        } else {
+          this.proxy.cards = this.param.replica.filter(el => el.category === name)
+        }
       }
     }
   }

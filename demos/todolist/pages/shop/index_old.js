@@ -64,7 +64,7 @@ export default {
       },
       'l-cards': {
         component: {
-          data: this.proxy.cards,
+          iterate: this.proxy.cards,
           src: card,
           params: {
             buttons: {

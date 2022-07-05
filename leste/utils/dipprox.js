@@ -7,7 +7,9 @@ function dipprox(target, handler) {
         const path = [...p, key]
         const ref = path.join('_')
         if (handler.beforeSet) {
-          value = handler.beforeSet(target, path, value, ref) || value
+          const v = handler.beforeSet(target, path, value, ref)
+          if (v === undefined) return
+          value = v || value
         }
         if (value && typeof value === 'object') {
           value = proxify(value, path)

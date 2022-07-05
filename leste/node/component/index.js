@@ -4,17 +4,16 @@ import induce from './induce'
 import { Component } from './component'
 
 async function component() {
-  this.nodeElement.advance = async(options) => {
-    const component = new this.Component(options, this.context, this.keyNode, this.nodeElement, this.common)
-    await component.create(options.src, options.proxies, null, true)
-  }
   this.nodeElement.integrate = async (options) => {
-    const { component, proxies } = this.simple(options)
-    await component.create(options.src, proxies)
+    if (this.nodeElement.unmount && !this.nodeElement.hasAttribute('integrate')) {
+      this.nodeElement.setAttribute('integrate', '')
+      const {component, proxies} = this.simple(options)
+      await component.create(options.src, proxies)
+    }
   }
-  if (this.node.component.data) {
+  if (this.node.component.iterate) {
     await this.iterate()
-  } else if (this.node.component.precept) {
+  } else if (this.node.component.induce) {
     await this.induce()
   } else {
     const { component, proxies } = this.simple()
